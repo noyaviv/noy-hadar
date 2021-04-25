@@ -681,7 +681,7 @@ sigprocmask(uint sigmask) {
 }
 
 int sigaction (int signum, const struct sigaction *act, struct sigaction *oldact){
-  if (signum == SIGKILL|| sigaction == SIGSTOP)
+  if (signum == SIGKILL|| signum == SIGSTOP)
     return -1; 
 
   if(oldact != null)

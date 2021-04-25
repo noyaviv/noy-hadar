@@ -1,10 +1,3 @@
-//2.1.1 changes: 
-#define SIG_DFL 0 /* default signal handling */
-#define SIG_IGN 1 /* ignore signal */
-#define SIGKILL 9
-#define SIGSTOP 17
-#define SIGCONT 19
- 
 
 // Saved registers for kernel context switches.
 struct context {
