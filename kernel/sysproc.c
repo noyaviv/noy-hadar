@@ -111,8 +111,8 @@ uint64
 sys_sigaction(void)
 {
   int signum;
-  const struct sigaction *act;
-  struct sigaction *oldact;
+  const struct sigaction* act;
+  struct sigaction* oldact;
 
   if(argint(0, &signum) < 0 || argptr(1, (void*)&act, sizeof(*act)) < 0 || argptr(2, (void*)&oldact, sizeof(*oldact)) < 0)
     return -1;
