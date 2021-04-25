@@ -685,10 +685,11 @@ int sigaction (int signum, const struct sigaction *act, struct sigaction *oldact
     return -1; 
 
   if(oldact != NULL)
-    *oldact = myproc->signalHandlers[signum]; 
+    *oldact = myproc()->signalHandlers[signum]; 
 
   if (act != NULL)
-    myproc->signalHandlers[signum]= *act; 
-    return 0; 
+    myproc()->signalHandlers[signum]= *act; 
+  
+  return 0; 
 
 }
