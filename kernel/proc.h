@@ -1,3 +1,11 @@
+//2.1.1 changes: 
+#define SIG_DFL 0 /* default signal handling */
+#define SIG_IGN 1 /* ignore signal */
+#define SIGKILL 9
+#define SIGSTOP 17
+#define SIGCONT 19
+ 
+
 // Saved registers for kernel context switches.
 struct context {
   uint64 ra;
@@ -105,4 +113,10 @@ struct proc {
   struct file *ofile[NOFILE];  // Open files
   struct inode *cwd;           // Current directory
   char name[16];               // Process name (debugging)
+
+  //2.1.1 additions 
+  uint32 pendingSignals; // 32bit array, stored as type uint.
+  uint32 signalMask; // 32bit array, stored as type uint.
+  void* signalHandlers[32]; // Array of size 32, of type void*.
+  struct trapframe *backupTrapframe; // Pointer to a trapframe struct stored as struct trapframe*
 };

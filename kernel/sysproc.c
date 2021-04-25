@@ -95,3 +95,15 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+uint64
+sys_sigprocmask(void)
+{
+  // calls sigprocmask uint sigprocmask (uint sigmask); 
+  int sigmask; 
+  if(argint(0, &sigmask) < 0)
+    return -1;
+
+  return (uint64)sigprocmask((uint)sigmask);
+}
+

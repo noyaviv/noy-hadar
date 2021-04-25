@@ -119,6 +119,14 @@ allocproc(void)
 found:
   p->pid = allocpid();
   p->state = USED;
+  //2.1.2 updating process creation behavior
+  //maybe we need to move towards all the array and intialize it to SIG_DFL. 
+  p->signalMask = 0; 
+  p->pendingSignals = 0; 
+  for(int i = 0; i<32; i++){
+    p->signalHandlers[i]  =  SIG_DFL; /* default signal handling */
+  }
+  
 
   // Allocate a trapframe page.
   if((p->trapframe = (struct trapframe *)kalloc()) == 0){
@@ -288,6 +296,9 @@ fork(void)
     return -1;
   }
   np->sz = p->sz;
+  np->signalMask = p->signalMask; 
+  np->signalHandlers = p->signalHandlers; 
+
 
   // copy saved user registers.
   *(np->trapframe) = *(p->trapframe);
@@ -653,4 +664,9 @@ procdump(void)
     printf("%d %s %s", p->pid, state, p->name);
     printf("\n");
   }
+}
+
+uint
+sigprocmask(uint sigmask) {
+// This will update the process signal mask, the return value should be the old mask
 }

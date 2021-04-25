@@ -21,6 +21,14 @@ exec(char *path, char **argv)
   pagetable_t pagetable = 0, oldpagetable;
   struct proc *p = myproc();
 
+  //2.1.2 returning all custom signal handlers to default
+  // need to understand where to allocate the return to all custom signal handlers to default
+  for(int i = 0; i<32; i++){
+    void* sighandler = p->signalHandlers[i];
+    if((int)sighandler != SIG_DFL && (int)sighandler != SIG_IGN)
+      p->signalHandlers[i]  =  SIG_DFL; /* default signal handling */
+  }
+
   begin_op();
 
   if((ip = namei(path)) == 0){
