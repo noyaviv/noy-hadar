@@ -26,9 +26,10 @@ exec(char *path, char **argv)
   for(int i = 0; i<32; i++){
     void* sighandler = p->signalHandlers[i].sa_handler;
     int x = *(int*)sighandler; 
-    if(x != SIG_DFL && x != SIG_IGN)
+    if(x != SIG_DFL && x != SIG_IGN){
       p->signalHandlers[i].sa_handler  =  SIG_DFL; /* default signal handling */
       p->signalHandlers[i].sigmask = 0; 
+    }
   }
 
   begin_op();
