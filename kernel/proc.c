@@ -125,7 +125,7 @@ found:
   p->pendingSignals = 0; 
   for(int i = 0; i<32; i++){
     p->signalHandlers[i].sa_handler  =  SIG_DFL; /* default signal handling */
-    p->signal_handlers->sigmask = 0;
+    p->signalHandlers->sigmask = 0;
   }
   
 
