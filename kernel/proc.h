@@ -122,6 +122,6 @@ struct proc {
   //2.1.1 additions 
   uint32 pendingSignals; // 32bit array, stored as type uint.
   uint32 signalMask; // 32bit array, stored as type uint.
-  void* signalHandlers[32]; // Array of size 32, of type void*.
+  struct sigaction signalHandlers[32]; // Array of size 32, of type void*.
   struct trapframe *backupTrapframe; // Pointer to a trapframe struct stored as struct trapframe*
 };
