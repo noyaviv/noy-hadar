@@ -679,3 +679,16 @@ sigprocmask(uint sigmask) {
   return oldMask; 
 // This will update the process signal mask, the return value should be the old mask
 }
+
+int sigaction (int signum, const struct sigaction *act, struct sigaction *oldact){
+  if (signum == SIGKILL|| sigaction == SIGSTOP)
+    return -1; 
+
+  if(oldact != null)
+    *oldact = myproc->signalHandlers[signum]; 
+
+  if (act != null)
+    myproc->signalHandlers[signum]= *act; 
+    return 0; 
+
+}

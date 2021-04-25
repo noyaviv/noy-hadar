@@ -43,3 +43,4 @@ void *memcpy(void *, const void *, uint);
 
 // signals 
 uint sigprocmask (uint); // 2.1.3 Updating the process signal mask
+int sigaction (int, const struct sigaction*, struct sigaction*); 

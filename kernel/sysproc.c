@@ -107,3 +107,18 @@ sys_sigprocmask(void)
   return (uint64)sigprocmask((uint)sigmask);
 }
 
+uint64 
+sys_sigaction(void)
+{
+  int signum;
+  const struct sigaction *act;
+  struct sigaction *oldact;
+
+  if(argint(0, &signum) < 0 || argptr(1, (void*)&act, sizeof(*act)) < 0 || argptr(2, (void*)&oldact, sizeof(*oldact)) < 0)
+    return -1;
+
+  return (uint64)sigaction(signum, act, oldact); 
+
+  //This system call will register a new handler for a given signal number (signum). sigaction returns 0 on success, on error, -1 is returned.
+}
+
