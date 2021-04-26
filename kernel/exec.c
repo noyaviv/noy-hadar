@@ -24,11 +24,11 @@ exec(char *path, char **argv)
   //2.1.2 returning all custom signal handlers to default
   // need to understand where to allocate the return to all custom signal handlers to default
   for(int i = 0; i<32; i++){
-    void* sighandler = p->signalHandlers[i].sa_handler;
-    int x = *(int*)sighandler; 
-    if(x != SIG_DFL && x != SIG_IGN){
-      p->signalHandlers[i].sa_handler  =  SIG_DFL; /* default signal handling */
-      p->signalHandlers[i].sigmask = 0; 
+    // void* sighandler = p->signalHandlers[i].sa_handler;
+    // int x = *(int*)sighandler; 
+    // if(x != SIG_DFL && x != SIG_IGN){
+      // p->signalHandlers[i].sa_handler  =  SIG_DFL; /* default signal handling */
+      // p->signalHandlers[i].sigmask = 0; 
     }
   }
 
