@@ -120,11 +120,15 @@ exec(char *path, char **argv)
   safestrcpy(p->name, last, sizeof(p->name));
   
     for(int j = 0; j < 32; j++) {
-    void* handler = p->signalHandlers[j].sa_handler;
-    if((int)handler != SIG_DFL && (int)handler != SIG_IGN) {
+      if (p->signalHandlers[i].sa_handler == (void *)SIG_IGN || p->signalHandlers[i].sa_handler == (void *)SIG_DFL)
+        continue; 
       p->signalHandlers[j].sa_handler = SIG_DFL;
       p->signalHandlers[j].sigmask = 0;
-    }
+    // void* handler = p->signalHandlers[j].sa_handler;
+    // if((int)handler != SIG_DFL && (int)handler != SIG_IGN) {
+    //   p->signalHandlers[j].sa_handler = SIG_DFL;
+    //   p->signalHandlers[j].sigmask = 0;
+    // }
   }
   // Commit to the user image.
   oldpagetable = p->pagetable;
