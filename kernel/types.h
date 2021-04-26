@@ -9,7 +9,7 @@ typedef unsigned long uint64;
 
 typedef uint64 pde_t;
 //2.1.1 changes: 
-#define NULL 0 
+#define null 0 
 #define SIGSNUM 32
 #define SIG_DFL 0 /* default signal handling */
 #define SIG_IGN 1 /* ignore signal */

@@ -684,10 +684,10 @@ int sigaction (int signum, const struct sigaction *act, struct sigaction *oldact
   if (signum == SIGKILL|| signum == SIGSTOP)
     return -1; 
 
-  if(oldact != NULL)
+  if(oldact != null)
     *oldact = myproc()->signalHandlers[signum]; 
 
-  if (act != NULL)
+  if (act != null)
     myproc()->signalHandlers[signum]= *act; 
   
   return 0; 
