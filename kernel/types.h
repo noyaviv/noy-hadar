@@ -18,7 +18,7 @@ typedef uint64 pde_t;
 #define SIGCONT 19
 
 //2.1.4 new struct required for sigaction
-struct sigaction {
-void (*sa_handler) (int);
-uint sigmask; }; 
+// struct sigaction {
+// void (*sa_handler) (int);
+// uint sigmask; }; 
 

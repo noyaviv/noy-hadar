@@ -674,21 +674,29 @@ procdump(void)
 uint
 sigprocmask(uint sigmask) {
   struct proc *p = myproc();
+  acquire(&p->lock);
   uint oldMask = p->signalMask; 
   p->signalMask = sigmask; 
+  release(&p->lock);
   return oldMask; 
-// This will update the process signal mask, the return value should be the old mask
+  // This will update the process signal mask, the return value should be the old mask
 }
 
 int sigaction (int signum, const struct sigaction *act, struct sigaction *oldact){
   if (signum == SIGKILL|| signum == SIGSTOP)
     return -1; 
 
-  if(oldact != null)
+  if(oldact != null){
+    acquire(&p->lock);
     *oldact = myproc()->signalHandlers[signum]; 
+    release(&p->lock);
+  }
 
-  if (act != null)
+  if (act != null){
+    acquire(&p->lock);
     myproc()->signalHandlers[signum]= *act; 
+    release(&p->lock);
+  }
   
   return 0; 
 
