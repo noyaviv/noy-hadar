@@ -687,15 +687,11 @@ int sigaction (int signum, const struct sigaction *act, struct sigaction *oldact
     return -1; 
 
   if(oldact != null){
-    acquire(&p->lock);
     *oldact = myproc()->signalHandlers[signum]; 
-    release(&p->lock);
   }
 
   if (act != null){
-    acquire(&p->lock);
     myproc()->signalHandlers[signum]= *act; 
-    release(&p->lock);
   }
   
   return 0; 
