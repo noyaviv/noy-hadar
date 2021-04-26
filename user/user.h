@@ -1,9 +1,9 @@
 struct stat;
 struct rtcdate;
-struct sigaction {
-  void (*sa_handler)(int);
-  uint sigmask;
-};
+// struct sigaction {
+//   void (*sa_handler)(int);
+//   uint sigmask;
+// };
 
 // system calls
 int fork(void);
@@ -28,6 +28,7 @@ char* sbrk(int);
 int sleep(int);
 int uptime(void);
 
+
 // ulib.c
 int stat(const char*, struct stat*);
 char* strcpy(char*, const char*);
@@ -48,3 +49,4 @@ void *memcpy(void *, const void *, uint);
 // signals 
 uint sigprocmask (uint); // 2.1.3 Updating the process signal mask
 int sigaction (int, const struct sigaction*, struct sigaction*); 
+void sigret (void); //2.1.5 

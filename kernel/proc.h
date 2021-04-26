@@ -84,9 +84,9 @@ struct trapframe {
 enum procstate { UNUSED, USED, SLEEPING, RUNNABLE, RUNNING, ZOMBIE };
 
 //2.1.4 new struct required for sigaction
-struct sigaction {
-void (*sa_handler) (int);
-uint sigmask; }; 
+// struct sigaction {
+// void (*sa_handler) (int);
+// uint sigmask; }; 
 
 
 // Per-process state
