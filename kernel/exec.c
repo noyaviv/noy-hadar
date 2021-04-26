@@ -27,9 +27,9 @@ exec(char *path, char **argv)
     // void* sighandler = p->signalHandlers[i].sa_handler;
     // int x = *(int*)sighandler; 
     // if(x != SIG_DFL && x != SIG_IGN){
-      // p->signalHandlers[i].sa_handler  =  SIG_DFL; /* default signal handling */
-      // p->signalHandlers[i].sigmask = 0; 
-    }
+    //   p->signalHandlers[i].sa_handler  =  SIG_DFL; /* default signal handling */
+    //   p->signalHandlers[i].sigmask = 0; 
+    // }
   }
 
   begin_op();
