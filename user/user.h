@@ -1,9 +1,9 @@
 struct stat;
 struct rtcdate;
-// struct sigaction {
-//   void (*sa_handler)(int);
-//   uint sigmask;
-// };
+struct sigaction {
+  void (*sa_handler)(int);
+  uint sigmask;
+};
 
 // system calls
 int fork(void);
