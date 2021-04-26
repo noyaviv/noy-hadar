@@ -119,11 +119,11 @@ exec(char *path, char **argv)
       last = s+1;
   safestrcpy(p->name, last, sizeof(p->name));
   
-    for(j = 0; j < 32; j++) {
-    void* handler = curproc->signalHandlers[j].sa_handler;
+    for(int j = 0; j < 32; j++) {
+    void* handler = p->signalHandlers[j].sa_handler;
     if((int)handler != SIG_DFL && (int)handler != SIG_IGN) {
-      curproc->signalHandlers[j].sa_handler = SIG_DFL;
-      curproc->signalHandlers[j].sigmask = 0;
+      p->signalHandlers[j].sa_handler = SIG_DFL;
+      p->signalHandlers[j].sigmask = 0;
     }
   }
   // Commit to the user image.
