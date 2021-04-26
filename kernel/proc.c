@@ -673,12 +673,11 @@ procdump(void)
 
 uint
 sigprocmask(uint sigmask) {
-  struct proc *p = myproc();
-  acquire(&p->lock);
-  uint oldMask = p->signalMask; 
-  p->signalMask = sigmask; 
-  release(&p->lock);
-  return oldMask; 
+  // struct proc *p = myproc();
+  // uint oldMask = p->signalMask; 
+  // p->signalMask = sigmask; 
+  // return oldMask; 
+  return 0; 
   // This will update the process signal mask, the return value should be the old mask
 }
 
