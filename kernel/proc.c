@@ -693,3 +693,7 @@ int sigaction (int signum, const struct sigaction *act, struct sigaction *oldact
   return 0; 
 
 }
+
+void sigret (void){
+  //TO DO 
+}

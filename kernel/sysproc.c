@@ -122,3 +122,10 @@ sys_sigaction(void)
   //This system call will register a new handler for a given signal number (signum). sigaction returns 0 on success, on error, -1 is returned.
 }
 
+uint64
+sys_sigret(void)
+{
+  return 0; 
+  // This system call will be called implicitly when returning from user space after handling a signal.
+}
+

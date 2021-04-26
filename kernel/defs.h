@@ -108,6 +108,7 @@ int             either_copyin(void *dst, int user_src, uint64 src, uint64 len);
 void            procdump(void);
 uint            sigprocmask (uint); // 2.1.3 Updating the process signal mask **make sure that we don't need to remove the variable name**
 int             sigaction (int, const struct sigaction *, struct sigaction *); 
+void            sigret (void); //2.1.5 
 
 
 
