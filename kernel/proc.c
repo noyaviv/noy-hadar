@@ -119,14 +119,6 @@ allocproc(void)
 found:
   p->pid = allocpid();
   p->state = USED;
-  //2.1.2 updating process creation behavior
-  //maybe we need to move towards all the array and intialize it to SIG_DFL. 
-  p->signalMask = 0; 
-  p->pendingSignals = 0; 
-  for(int i = 0; i<32; i++){
-    p->signalHandlers[i].sa_handler  =  SIG_DFL; /* default signal handling */
-    p->signalHandlers->sigmask = 0;
-  }
   
 
   // Allocate a trapframe page.
@@ -149,6 +141,19 @@ found:
   memset(&p->context, 0, sizeof(p->context));
   p->context.ra = (uint64)forkret;
   p->context.sp = p->kstack + PGSIZE;
+
+    //2.1.2 updating process creation behavior
+  //maybe we need to move towards all the array and intialize it to SIG_DFL. 
+  p->signalMask = 0; 
+  p->pendingSignals = 0;
+  // struct sigaction sa;
+  // memset(&sa,0,sizeof (sa));
+  // sa.sa_handler = (void *)SIG_DFL; 
+  for(int i = 0; i<32; i++){
+    // p->signalHandlers[i] = sa; 
+     p->signalHandlers[i].sa_handler  =  SIG_DFL; /* default signal handling */
+     p->signalHandlers->sigmask = 0;
+  }
 
   return p;
 }

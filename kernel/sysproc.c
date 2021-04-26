@@ -100,15 +100,16 @@ uint64
 sys_sigprocmask(void)
 {
   // calls sigprocmask uint sigprocmask (uint sigmask); 
-  int sigmask; 
-  if(argint(0, &sigmask) < 0)
-    return -1;
+  // int sigmask; 
+  // if(argint(0, &sigmask) < 0)
+  //   return -1;
 
-  if (sigmask < 0)
-    return -1;
-  int oldmask = myproc()->signalMask;
-  myproc()->signalMask = (uint)sigmask;
-  return oldmask;
+  // if (sigmask < 0)
+  //   return -1;
+  // int oldmask = myproc()->signalMask;
+  // myproc()->signalMask = (uint)sigmask;
+  // return oldmask;
+  return 0;
 
   //return (uint64)sigprocmask((uint)sigmask);
 }
@@ -125,12 +126,12 @@ sys_sigaction(void)
 
   //return (uint64)sigaction(signum, act, oldact); 
   //*****NEW****
-  if (signum == SIGKILL || signum == SIGSTOP){
-      return -1;
-  }
-  if (oldact != null)
-    *oldact = myproc()->signalHandlers[signum];
-  myproc()->signalHandlers[signum] = *act;
+  // if (signum == SIGKILL || signum == SIGSTOP){
+  //     return -1;
+  // }
+  // if (oldact != null)
+  //   *oldact = myproc()->signalHandlers[signum];
+  // myproc()->signalHandlers[signum] = *act;
   return 0;
     //*****END_NEW****
   //This system call will register a new handler for a given signal number (signum). sigaction returns 0 on success, on error, -1 is returned.
