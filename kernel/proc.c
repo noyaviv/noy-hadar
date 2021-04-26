@@ -687,16 +687,16 @@ sigprocmask(uint sigmask) {
 }
 
 int sigaction (int signum, const struct sigaction *act, struct sigaction *oldact){
-  // if (signum == SIGKILL|| signum == SIGSTOP)
-  //   return -1; 
+  if (signum == SIGKILL|| signum == SIGSTOP)
+    return -1; 
 
-  // if(oldact != null){
-  //   *oldact = myproc()->signalHandlers[signum]; 
-  // }
+  if(oldact != null){
+    *oldact = myproc()->signalHandlers[signum]; 
+  }
 
-  // if (act != null){
-  //   myproc()->signalHandlers[signum]= *act; 
-  // }
+  if (act != null){
+    myproc()->signalHandlers[signum]= *act; 
+  }
   
   return 0; 
 

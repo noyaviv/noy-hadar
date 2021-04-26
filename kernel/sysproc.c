@@ -124,7 +124,7 @@ sys_sigaction(void)
   if(argint(0, &signum) < 0 || argstr(1, (void*)&act, sizeof(*act)) < 0 || argstr(2, (void*)&oldact, sizeof(*oldact)) < 0)
     return -1;
 
-  //return (uint64)sigaction(signum, act, oldact); 
+  return (uint64)sigaction(signum, act, oldact); 
   //*****NEW****
   // if (signum == SIGKILL || signum == SIGSTOP){
   //     return -1;
@@ -132,7 +132,7 @@ sys_sigaction(void)
   // if (oldact != null)
   //   *oldact = myproc()->signalHandlers[signum];
   // myproc()->signalHandlers[signum] = *act;
-  return 0;
+  // return 0;
     //*****END_NEW****
   //This system call will register a new handler for a given signal number (signum). sigaction returns 0 on success, on error, -1 is returned.
 }
