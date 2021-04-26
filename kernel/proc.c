@@ -678,11 +678,10 @@ procdump(void)
 
 uint
 sigprocmask(uint sigmask) {
-  // struct proc *p = myproc();
-  // uint oldMask = p->signalMask; 
-  // p->signalMask = sigmask; 
-  // return oldMask; 
-  return 0; 
+  struct proc *p = myproc();
+  uint oldMask = p->signalMask; 
+  p->signalMask = sigmask; 
+  return oldMask; 
   // This will update the process signal mask, the return value should be the old mask
 }
 
@@ -699,7 +698,6 @@ int sigaction (int signum, const struct sigaction *act, struct sigaction *oldact
   }
   
   return 0; 
-
 }
 
 void sigret (void){
