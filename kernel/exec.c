@@ -118,7 +118,14 @@ exec(char *path, char **argv)
     if(*s == '/')
       last = s+1;
   safestrcpy(p->name, last, sizeof(p->name));
-    
+  
+    for(j = 0; j < 32; j++) {
+    void* handler = curproc->signalHandlers[j].sa_handler;
+    if((int)handler != SIG_DFL && (int)handler != SIG_IGN) {
+      curproc->signalHandlers[j].sa_handler = SIG_DFL;
+      curproc->signalHandlers[j].sigmask = 0;
+    }
+  }
   // Commit to the user image.
   oldpagetable = p->pagetable;
   p->pagetable = pagetable;
