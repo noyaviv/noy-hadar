@@ -106,10 +106,11 @@ sys_sigprocmask(void)
 
   if (sigmask < 0)
     return -1;
+  //*****NEW****
   // int oldmask = myproc()->signalMask;
   // myproc()->signalMask = (uint)sigmask;
   // return oldmask;
-
+ //*****END_NEW****
 
   return (uint64)sigprocmask((uint)sigmask);
 }

@@ -151,8 +151,8 @@ found:
   // sa.sa_handler = (void *)SIG_DFL; 
   for(int i = 0; i<32; i++){
     // p->signalHandlers[i] = sa; 
-    //  p->signalHandlers[i].sa_handler  =  SIG_DFL; /* default signal handling */
-    //  p->signalHandlers->sigmask = 0;
+     p->signalHandlers[i].sa_handler  =  SIG_DFL; /* default signal handling */
+     p->signalHandlers->sigmask = 0;
   }
 
   return p;
