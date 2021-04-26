@@ -99,7 +99,7 @@ sys_uptime(void)
 uint64
 sys_sigprocmask(void)
 {
-  calls sigprocmask uint sigprocmask (uint sigmask); 
+  //calls sigprocmask uint sigprocmask (uint sigmask); 
   int sigmask; 
   if(argint(0, &sigmask) < 0)
     return -1;
