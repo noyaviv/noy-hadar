@@ -600,20 +600,26 @@ int
 kill(int pid, int signum)
 {
   struct proc *p;
+  if(signum < 0 || signum >= 32)
+    return -1;
 
   for(p = proc; p < &proc[NPROC]; p++){
     acquire(&p->lock);
-    if(p->pid == pid){
-      p->killed = 1;
-      if(p->state == SLEEPING){
-        // Wake process from sleep().
-        p->state = RUNNABLE;
-      }
+      if(p->pid == pid){
+        if(signum == SIGKILL){
+          p->killed = 1;
 
-      p->pendingSignals = (p->pendingSignals | 1<<signum); 
-      release(&p->lock);
-      return 0;
-    }
+          if(p->state == SLEEPING){
+            // Wake process from sleep().
+            p->state = RUNNABLE;
+          }
+        }
+        else{
+          p->pendingSignals = (p->pendingSignals | 1<<signum); 
+        }
+        release(&p->lock);
+        return 0;
+      }
     release(&p->lock);
   }
   return -1;
@@ -705,3 +711,15 @@ int sigaction (int signum, const struct sigaction *act, struct sigaction *oldact
 void sigret (void){
   //TO DO 
 }
+
+void sigkillHandler(void){
+  myproc()->killed = 1; 
+}
+void sigstopHandler(void){
+  myproc()->frozen = 1;
+}
+void sigcontHandler(void){
+  if (myproc()->frozen == 1)
+    myproc()->frozen = 0;
+}
+
