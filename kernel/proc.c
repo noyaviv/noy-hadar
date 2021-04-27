@@ -729,8 +729,8 @@ void signalHandler(void){
   if(p!=0){
     for(int i=0;i<32;++i){
       if((1<<i&p->pendingSignals) && !((1<<i)&p->signalMask)){
-        if((int)p->signalHandlers[i].sa_handler == SIG_IGN){continue;}
-        if((int)p->signalHandlers[i].sa_handler == SIG_DFL){ //kernel space handler
+        if(p->signalHandlers[i].sa_handler == (*void)SIG_IGN){continue;}
+        if(p->signalHandlers[i].sa_handler ==(*void)SIG_DFL){ //kernel space handler
             switch(i){
                 case SIGKILL:
                     sigkillHandler();
