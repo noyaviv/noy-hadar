@@ -723,3 +723,33 @@ void sigcontHandler(void){
     myproc()->frozen = 0;
 }
 
+void signalHandler(void){
+  struct proc *p;
+  p = myproc(); 
+  if(p!=0){
+    for(int i=0;i<32;++i){
+      if((1<<i&p->pendingSignals) && !((1<<i)&p->signalMask)){
+        if(p->signalHandlers[i]==(void*)SIG_IGN){continue;}
+        if(p->signalHandlers[i]==(void*)SIG_DFL){ //kernel space handler
+            switch(i){
+                case SIGKILL:
+                    sigkillHandler();
+                    break;
+                case SIGSTOP:
+                    sigstopHandler();
+                    break;
+                case SIGCONT:
+                    sigcontHandler(); //To Cheack 
+                    break;
+                default:
+                    sigkillHandler();
+                    break;
+            }
+        }else{ //user space handler
+           // handleUserSignal(p,i);
+        }
+      }
+    }
+  }
+  return;
+}
