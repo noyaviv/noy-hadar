@@ -609,6 +609,8 @@ kill(int pid, int signum)
         // Wake process from sleep().
         p->state = RUNNABLE;
       }
+
+      p->pendingSignals = (p->pendingSignals | 1<<signum); 
       release(&p->lock);
       return 0;
     }

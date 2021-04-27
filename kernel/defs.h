@@ -106,11 +106,12 @@ void            yield(void);
 int             either_copyout(int user_dst, uint64 dst, void *src, uint64 len);
 int             either_copyin(void *dst, int user_src, uint64 src, uint64 len);
 void            procdump(void);
-uint            sigprocmask (uint); // 2.1.3 Updating the process signal mask **make sure that we don't need to remove the variable name**
-int             sigaction (int, const struct sigaction *, struct sigaction *); 
-void            sigret (void); //2.1.5 
-
-
+uint            sigprocmask(uint); // 2.1.3 Updating the process signal mask **make sure that we don't need to remove the variable name**
+int             sigaction(int, const struct sigaction *, struct sigaction *); 
+void            sigret(void); //2.1.5 
+void            sigkillHandler(void); 
+void            sigstopHandler(void); 
+void            sigcontHandler(void); 
 
 // swtch.S
 void            swtch(struct context*, struct context*);

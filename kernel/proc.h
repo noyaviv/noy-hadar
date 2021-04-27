@@ -118,4 +118,5 @@ struct proc {
   uint32 signalMask; // 32bit array, stored as type uint.
   struct sigaction signalHandlers[32]; // Array of size 32, of type void*.
   struct trapframe *backupTrapframe; // Pointer to a trapframe struct stored as struct trapframe*
+  int frozen; 
 };
