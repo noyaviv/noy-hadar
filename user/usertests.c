@@ -2263,7 +2263,7 @@ sbrkfail(char *s)
   for(i = 0; i < sizeof(pids)/sizeof(pids[0]); i++){
     if(pids[i] == -1)
       continue;
-    kill, 9);
+    kill(pids[i], 9);
     wait(0);
   }
   if(c == (char*)0xffffffffffffffffL){
