@@ -21,7 +21,7 @@ kvmmake(void)
 {
   pagetable_t kpgtbl;
 
-  kpgtbl = (pagetable_t) kalloc();
+  kpgtbl = () kalloc();
   memset(kpgtbl, 0, PGSIZE);
 
   // uart registers
@@ -188,7 +188,7 @@ uvmunmap(pagetable_t pagetable, uint64 va, uint64 npages, int do_free)
 pagetable_t
 uvmcreate()
 {
-  pagetable_t pagetable;
+   pagetable;
   pagetable = (pagetable_t) kalloc();
   if(pagetable == 0)
     return 0;
