@@ -112,6 +112,8 @@ void            sigret(void); //2.1.5
 void            sigkillHandler(void); 
 void            sigstopHandler(void); 
 void            sigcontHandler(void); 
+void            signalHandler(void);
+void            userSpaceHandler(struct proc*, int);
 
 // swtch.S
 void            swtch(struct context*, struct context*);

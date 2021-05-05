@@ -139,3 +139,13 @@ userret:
         # return to user mode and user pc.
         # usertrapret() set up sstatus and sepc.
         sret
+
+.globl sigret_func_start
+.globl sigret_func_end
+
+# task 2.4 userSpaceHandler
+sigret_func_start:
+li a7, 24
+ecall
+sigret_func_end:
+

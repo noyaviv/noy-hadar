@@ -128,10 +128,14 @@ UPROGS=\
 	$U/_rm\
 	$U/_sh\
 	$U/_stressfs\
+	$U/_test\
 	$U/_usertests\
+	$U/_usertests2\
 	$U/_grind\
 	$U/_wc\
 	$U/_zombie\
+
+	# TODO delete "test" and usertest1 or 2
 
 fs.img: mkfs/mkfs README $(UPROGS)
 	mkfs/mkfs fs.img README $(UPROGS)

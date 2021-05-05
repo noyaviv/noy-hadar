@@ -33,8 +33,11 @@ uint64
 sys_wait(void)
 {
   uint64 p;
-  if(argaddr(0, &p) < 0)
-    return -1;
+  if(argaddr(0, &p) < 0){
+    printf("is it in sys proc\n"); //TODO DELTER
+        return -1;
+  }
+
   return wait(p);
 }
 

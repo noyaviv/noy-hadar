@@ -21,17 +21,6 @@ exec(char *path, char **argv)
   pagetable_t pagetable = 0, oldpagetable;
   struct proc *p = myproc();
 
-  //2.1.2 returning all custom signal handlers to default
-  // need to understand where to allocate the return to all custom signal handlers to default
-  for(int i = 0; i<32; i++){
-    // void* sighandler = p->signalHandlers[i].sa_handler;
-    // int x = *(int*)sighandler; 
-    // if(x != SIG_DFL && x != SIG_IGN){
-    //   p->signalHandlers[i].sa_handler  =  SIG_DFL; /* default signal handling */
-    //   p->signalHandlers[i].sigmask = 0; 
-    // }
-  }
-
   begin_op();
 
   if((ip = namei(path)) == 0){
@@ -120,10 +109,10 @@ exec(char *path, char **argv)
   safestrcpy(p->name, last, sizeof(p->name));
   
     for(int j = 0; j < 32; j++) {
-      if (p->signalHandlers[i].sa_handler == (void *)SIG_IGN || p->signalHandlers[i].sa_handler == (void *)SIG_DFL)
+      if (p->signalHandlers[j] == (void *)SIG_IGN || p->signalHandlers[j] == (void *)SIG_DFL)
         continue; 
-      p->signalHandlers[j].sa_handler = SIG_DFL;
-      p->signalHandlers[j].sigmask = 0;
+      p->signalHandlers[j] = SIG_DFL;
+      p->sigMaskArray[j] = 0;
     // void* handler = p->signalHandlers[j].sa_handler;
     // if((int)handler != SIG_DFL && (int)handler != SIG_IGN) {
     //   p->signalHandlers[j].sa_handler = SIG_DFL;
