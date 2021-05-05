@@ -631,9 +631,10 @@ kill(int pid, int signum)
           }
         }
         else{
-          if(signum == SIGCONT)
-            printf("sigcont is in the house");
           p->pendingSignals = (p->pendingSignals | 1<<signum); 
+
+        if((p->pendingSignals&(1<<SIGCONT))==0)
+           printf("sigcont is in the house");
         }
         release(&p->lock);
         return 0;
