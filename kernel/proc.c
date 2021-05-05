@@ -753,8 +753,7 @@ void sigstopHandler(void){
   int stillFrozen = 1; 
   while(stillFrozen){
     if((p->pendingSignals&(1<<SIGCONT))==0){
-      continue;
-      //yield();
+      yield();
     }
     else{
       printf("I'm out freezing");
