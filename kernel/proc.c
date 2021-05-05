@@ -457,7 +457,6 @@ wait(uint64 addr)
     
     // Wait for a child to exit.
     printf("pid %d got here 7\n",p->pid); //TODO delete
-
     sleep(p, &wait_lock);  //DOC: wait-sleep
   }
 }
@@ -772,6 +771,7 @@ void sigcontHandler(void){
 
 // for each signal check if can be handled in the kernel space or need to be handle in the user space
 void signalHandler(void){
+  printf("hi i'm in signalHandler function");
   struct proc *p;
   p = myproc(); 
   if(p!=0){
@@ -786,6 +786,7 @@ void signalHandler(void){
                     sigkillHandler();
                     break;
                 case SIGSTOP:
+                    printf("hi i'm in SIGSTOP function");
                     sigstopHandler();
                     break;
                 case SIGCONT:
