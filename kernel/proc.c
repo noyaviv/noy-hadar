@@ -744,7 +744,17 @@ void sigkillHandler(void){
   printf("%d is in sigkillHandler\n", myproc()->pid);//TODO delete
 }
 void sigstopHandler(void){
+  struct proc *p = myproc(); 
   myproc()->frozen = 1;
+  int stillFrozen = 1; 
+  while(stillFrozen){
+    if((p->pendingSignals&(1<<SIGCONT))!=0){
+      stillFrozen = 0; 
+      p->frozen = 0; 
+      p->pendingSignals = p->pendingSignals & (~ (1 << SIGCONT));
+      p->pendingSignals = p->pendingSignals & (~ (1 << SIGSTOP)); 
+    }
+  }
   printf("%d is in sigstopHandler\n", myproc()->pid);//TODO delete
 
 }
@@ -783,7 +793,8 @@ void signalHandler(void){
                     sigkillHandler();
                     break;
             }
-            p->pendingSignals = p->pendingSignals & (~ (1 << i)); // ~ is Bitwise complement, we remove the signem from the pending signals
+            if (i==SIGKILL)
+              p->pendingSignals = p->pendingSignals & (~ (1 << SIGKILL)); // ~ is Bitwise complement, we remove the signem from the pending signals
         }else{ //user space handler
           p->backupSigMask= p->signalMask;
           // userSpaceHandler(p,p->signalMask);
