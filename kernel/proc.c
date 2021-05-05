@@ -752,16 +752,19 @@ void sigstopHandler(void){
   int stillFrozen = 1; 
   while(stillFrozen){
     if((p->pendingSignals&(1<<SIGCONT))==0){
-      yield();
+     printf("I'm freezing");
+
+      //yield();
     }
     else{
-      printf("I'm out freesing");
+      printf("I'm out freezing");
       stillFrozen = 0; 
       p->frozen = 0; 
-      p->pendingSignals = p->pendingSignals & (~ (1 << SIGCONT));
       p->pendingSignals = p->pendingSignals & (~ (1 << SIGSTOP)); 
+      p->pendingSignals = p->pendingSignals & (~ (1 << SIGCONT));
     }
   }
+  
   printf("%d is in sigstopHandler\n", myproc()->pid);//TODO delete
 }
 void sigcontHandler(void){
