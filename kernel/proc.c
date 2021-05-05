@@ -413,7 +413,7 @@ wait(uint64 addr)
   struct proc *np;
   int havekids, pid;
   struct proc *p = myproc();
-  printf("pid %d started wait func \n",p->pid); //TODO delete
+  //printf("pid %d started wait func \n",p->pid); //TODO delete
   acquire(&wait_lock);
 
   for(;;){
@@ -422,29 +422,29 @@ wait(uint64 addr)
     for(np = proc; np < &proc[NPROC]; np++){
       if(np->parent == p){
         // make sure the child isn't still in exit() or swtch().
-        printf("pid %d got here 2\n",p->pid); //TODO delete
+       // printf("pid %d got here 2\n",p->pid); //TODO delete
         acquire(&np->lock);
 
         havekids = 1;
         if(np->state == ZOMBIE){        
-          printf("pid %d got here 3\n",p->pid); //TODO delete
+         // printf("pid %d got here 3\n",p->pid); //TODO delete
 
           // Found one.
           pid = np->pid;
           if(addr != 0 && copyout(p->pagetable, addr, (char *)&np->xstate,
                                   sizeof(np->xstate)) < 0) {
-            printf("pid %d got here 4\n",p->pid); //TODO delete
+           // printf("pid %d got here 4\n",p->pid); //TODO delete
             release(&np->lock);
             release(&wait_lock);
             return -1;
           }
-          printf("pid %d got here 5\n",p->pid); //TODO delete
+          //printf("pid %d got here 5\n",p->pid); //TODO delete
           freeproc(np);
           release(&np->lock);
           release(&wait_lock);
           return pid;
         }
-        printf("pid %d got here 6\n",p->pid); //TODO delete
+        //printf("pid %d got here 6\n",p->pid); //TODO delete
         release(&np->lock);
       }
     }
