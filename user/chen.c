@@ -124,10 +124,10 @@ void kernelhandlers_test(){
         printf("perent pid %d is entering sleep mode\n", pid); //TODO : remove 
         sleep(10);
         printf("perent pid %d is entering kill with sig STOP\n", pid); //TODO : remove 
-        kill(pid,SIGSTOP);
+       // kill(pid,SIGSTOP);
         sleep(10);
         printf("perent pid %d is entering kill with sig CONT\n", pid); //TODO : remove 
-        kill(pid,SIGCONT);
+       // kill(pid,SIGCONT);
         sleep(10);
         printf("perent pid %d is entering kill with sig KILL\n", pid); //TODO : remove 
         kill(pid,SIGKILL);
