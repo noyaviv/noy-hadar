@@ -757,7 +757,7 @@ void sigstopHandler(void){
         yield();
       }
       else{
-        printf("I'm out freezing");
+        //printf("I'm out freezing");
         stillFrozen = 0; 
         p->frozen = 0; 
         p->pendingSignals = p->pendingSignals & (~ (1 << SIGSTOP)); 
@@ -765,8 +765,7 @@ void sigstopHandler(void){
       }
     }
   }
-
-  printf("%d is in sigstopHandler\n", myproc()->pid);//TODO delete
+  //printf("%d is in sigstopHandler\n", myproc()->pid);//TODO delete
 }
 void sigcontHandler(void){
   if (myproc()->frozen == 1){
@@ -789,17 +788,14 @@ void signalHandler(void){
       if((1<<i&p->pendingSignals) && !((1<<i)&p->signalMask)){
         if(p->signalHandlers[i] == (void *)SIG_IGN){continue;}
         if(p->signalHandlers[i] ==(void *)SIG_DFL){ //kernel space handler
-            printf("hi i'm in SIG_DFL state");
             switch(i){
                 case SIGKILL:
                     sigkillHandler();
                     break;
                 case SIGSTOP:
-                    printf("hi i'm in SIGSTOP function");
                     sigstopHandler();
                     break;
                 case SIGCONT:
-                    printf("hi i'm in SIGCONT function");
                     sigcontHandler(); //To Cheack 
                     break;
                 default:
