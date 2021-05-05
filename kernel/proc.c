@@ -631,6 +631,8 @@ kill(int pid, int signum)
           }
         }
         else{
+          if(signum == SIGCONT)
+            printf("sigcont is in the house");
           p->pendingSignals = (p->pendingSignals | 1<<signum); 
         }
         release(&p->lock);
@@ -750,6 +752,7 @@ void sigstopHandler(void){
   int stillFrozen = 1; 
   while(stillFrozen){
     if((p->pendingSignals&(1<<SIGCONT))!=0){
+      printf("I'm out freesing");
       stillFrozen = 0; 
       p->frozen = 0; 
       p->pendingSignals = p->pendingSignals & (~ (1 << SIGCONT));
@@ -790,6 +793,7 @@ void signalHandler(void){
                     sigstopHandler();
                     break;
                 case SIGCONT:
+                    printf("hi i'm in SIGCONT function");
                     sigcontHandler(); //To Cheack 
                     break;
                 default:
