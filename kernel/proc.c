@@ -456,6 +456,8 @@ wait(uint64 addr)
     }
     
     // Wait for a child to exit.
+    printf("pid %d got here 7\n",p->pid); //TODO delete
+
     sleep(p, &wait_lock);  //DOC: wait-sleep
   }
 }
