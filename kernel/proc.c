@@ -796,7 +796,7 @@ void signalHandler(void){
                     sigstopHandler();
                     break;
                 case SIGCONT:
-                    sigcontHandler(); //To Cheack 
+                    //sigcontHandler(); //To Cheack 
                     break;
                 default:
                     sigkillHandler();
