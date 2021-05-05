@@ -771,7 +771,6 @@ void sigcontHandler(void){
 
 // for each signal check if can be handled in the kernel space or need to be handle in the user space
 void signalHandler(void){
-  printf("hi i'm in signalHandler function");
   struct proc *p;
   p = myproc(); 
   if(p!=0){
@@ -781,6 +780,7 @@ void signalHandler(void){
       if((1<<i&p->pendingSignals) && !((1<<i)&p->signalMask)){
         if(p->signalHandlers[i] == (void *)SIG_IGN){continue;}
         if(p->signalHandlers[i] ==(void *)SIG_DFL){ //kernel space handler
+            printf("hi i'm in SIG_DFL state");
             switch(i){
                 case SIGKILL:
                     sigkillHandler();
