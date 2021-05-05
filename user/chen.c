@@ -113,6 +113,7 @@ void kernelhandlers_test(){
     printf("Test No.1 : \n");
     // SIG_DFL check & sigprocmask
     if((pid = fork()) == 0){
+        printf("child pid %d is entering sleep mode\n", pid); //TODO : remove 
         //child1
         while(1){
             printf("child\n");
@@ -120,13 +121,15 @@ void kernelhandlers_test(){
         }
     }
     else{ //parent
-
+        printf("perent pid %d is entering sleep mode\n", pid); //TODO : remove 
         sleep(10);
+        printf("perent pid %d is entering kill with sig STOP\n", pid); //TODO : remove 
         kill(pid,SIGSTOP);
         sleep(10);
+        printf("perent pid %d is entering kill with sig CONT\n", pid); //TODO : remove 
         kill(pid,SIGCONT);
         sleep(10);
-
+        printf("perent pid %d is entering kill with sig KILL\n", pid); //TODO : remove 
         kill(pid,SIGKILL);
         printf("waiting for child to finish\n");
         wait(&status);
