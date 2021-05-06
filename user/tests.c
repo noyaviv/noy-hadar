@@ -139,7 +139,7 @@ void user_tests_signal(){
 int
 main(int argc, char *argv[]){
     test_kernel_signals();
-    test_user_signals();
-    user_tests_signal();
+    //test_user_signals();
+    //user_tests_signal();
     exit(0);
 }
