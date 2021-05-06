@@ -749,21 +749,21 @@ void sigkillHandler(void){
 }
 void sigstopHandler(void){
   struct proc *p = myproc(); 
-  if((p->state==RUNNING || p->state==RUNNABLE) && !p->frozen){
     p->frozen = 1;
-    int stillFrozen = 1; 
-    while(stillFrozen){
-      if((p->pendingSignals&(1<<SIGCONT))==0){
-        yield();
+    //int stillFrozen = 1; 
+    while(p->frozen){
+      if((p->pendingSignals&(1<<SIGKILL))==0){
+        p->killed = 1;
+        return;
       }
-      else{
-        //printf("I'm out freezing");
-        stillFrozen = 0; 
-        p->frozen = 0; 
-        p->pendingSignals = p->pendingSignals & (~ (1 << SIGSTOP)); 
-        p->pendingSignals = p->pendingSignals & (~ (1 << SIGCONT));
-      }
-    }
+      yield;
+      // else{
+      //   //printf("I'm out freezing");
+      //   stillFrozen = 0; 
+      //   p->frozen = 0; 
+      //   p->pendingSignals = p->pendingSignals & (~ (1 << SIGSTOP)); 
+      //   p->pendingSignals = p->pendingSignals & (~ (1 << SIGCONT));
+      // }
   }
   //printf("%d is in sigstopHandler\n", myproc()->pid);//TODO delete
 }
@@ -796,14 +796,13 @@ void signalHandler(void){
                     sigstopHandler();
                     break;
                 case SIGCONT:
-                    //sigcontHandler(); //To Cheack 
+                    sigcontHandler(); //To Cheack 
                     break;
                 default:
                     sigkillHandler();
                     break;
             }
-            if (i==SIGKILL)
-              p->pendingSignals = p->pendingSignals & (~ (1 << SIGKILL)); // ~ is Bitwise complement, we remove the signem from the pending signals
+            p->pendingSignals = p->pendingSignals & (~ (1 << i)); // ~ is Bitwise complement, we remove the signem from the pending signals
         }else{ //user space handler
           p->backupSigMask= p->signalMask;
           // userSpaceHandler(p,p->signalMask);
