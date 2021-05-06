@@ -721,7 +721,7 @@ int sigaction (int signum, const struct sigaction *act, struct sigaction *oldact
   if (signum == SIGKILL|| signum == SIGSTOP)
     return -1; 
 
-  struct sigaction temp;
+  //struct sigaction temp;
 
   // if(copyin(p->pagetable,(char*)&temp,(uint64)act, sizeof(struct sigaction)) != 0){
   //   printf("sigaction failed in copyin\n");
