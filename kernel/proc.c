@@ -456,7 +456,7 @@ wait(uint64 addr)
     }
     
     // Wait for a child to exit.
-    printf("pid %d got here 7\n",p->pid); //TODO delete
+    //printf("pid %d got here 7\n",p->pid); //TODO delete
     sleep(p, &wait_lock);  //DOC: wait-sleep
   }
 }
@@ -620,10 +620,10 @@ kill(int pid, int signum)
     acquire(&p->lock);
       if(p->pid == pid){
         if(signum == SIGKILL){
-          printf("p->pid is %d \n",p->pid);
+          //printf("p->pid is %d \n",p->pid);
           p->killed = 1;
-          printf("p->pid is %d \n",p->pid);
-          printf("pid is %d is in called from kill function in proc.c with signum %d\n", pid,signum);//TODO delete
+         // printf("p->pid is %d \n",p->pid);
+          printf("kill(%d, %d) from process %d\n", pid,signum, p->pid); //TODO delete
 
           if(p->state == SLEEPING){
             // Wake process from sleep().
@@ -633,9 +633,9 @@ kill(int pid, int signum)
         else{
           p->pendingSignals = (p->pendingSignals | 1<<signum); 
 
-        if((p->pendingSignals&(1<<SIGCONT))==0)
-           printf("sigcont is in the house");
-        }
+        // if((p->pendingSignals&(1<<SIGCONT))==0)
+        //    printf("sigcont is in the house");
+        // }
         release(&p->lock);
         return 0;
       }
@@ -722,12 +722,13 @@ int sigaction (int signum, const struct sigaction *act, struct sigaction *oldact
     return -1; 
 
   struct sigaction temp;
-  
+
   if(copyin(p->pagetable,(char*)&temp,(uint64)act, sizeof(struct sigaction)) != 0){
     printf("sigaction failed in copyin\n");
     return -1;
   }
 
+  printf("sigaction copyin completed\n");
   if(oldact != null){
     oldact->sa_handler = p->signalHandlers[signum]; 
     oldact-> sigmask = p->sigMaskArray[signum]; 
@@ -763,7 +764,7 @@ void sigret (void){
 
 void sigkillHandler(void){
   myproc()->killed = 1; 
-  printf("%d is in sigkillHandler\n", myproc()->pid);//TODO delete
+  //printf("%d is in sigkillHandler\n", myproc()->pid);//TODO delete
 }
 void sigstopHandler(void){
   struct proc *p = myproc(); 
@@ -857,6 +858,4 @@ void userSpaceHandler(struct proc *p, int signum) {
   // return to the calling function
   p->trapframe->epc = (uint64)p->signalHandlers[signum];
   p->pendingSignals = p->pendingSignals & (~ (1 << signum)); // ~ is Bitwise complement, we remove the signem from the pending signals
-
-
 }
