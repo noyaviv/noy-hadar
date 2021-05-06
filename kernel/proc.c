@@ -756,7 +756,7 @@ void sigstopHandler(void){
         p->killed = 1;
         return;
       }
-      yield;
+      yield();
       // else{
       //   //printf("I'm out freezing");
       //   stillFrozen = 0; 
