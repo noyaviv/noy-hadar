@@ -713,24 +713,42 @@ sigprocmask(uint sigmask) {
 }
 
 int sigaction (int signum, const struct sigaction *act, struct sigaction *oldact){
-  struct proc *p=myproc();
+  if(signum < 0 || signum >= 32)
+    return -1;
+
+  struct proc *p = myproc();
+
   if (signum == SIGKILL|| signum == SIGSTOP)
     return -1; 
 
-  if (act == (void*)SIG_DFL){
-    printf("is DanDan right or wrong?\n"); //TODO delete
-    if(oldact != null){
-      memmove(&oldact,&p->signalHandlers[signum],sizeof(void*));
-    }
-    p->signalHandlers[signum]=&act;
-  }  
-  else {
-    if(oldact != null){
-      memmove(&oldact,&p->signalHandlers[signum],sizeof(void*));
-    }
-    memmove(&p->signalHandlers[signum],&act,sizeof(void*));
-
+  struct sigaction temp;
+  
+  if(copyin(p->pagetable,(char*)&temp,(uint64)act, sizeof(struct sigaction)) != 0){
+    printf("sigaction failed in copyin\n");
+    return -1;
   }
+
+  if(oldact != null){
+    oldact->sa_handler = p->signalHandlers[signum]; 
+    oldact-> sigmask = p->sigMaskArray[signum]; 
+  }
+  p->signalHandlers[signum] = temp.sa_handler; 
+  p->sigMaskArray[signum] = temp.sigmask; 
+
+  // if (act == (void*)SIG_DFL){
+  //   printf("is DanDan right or wrong?\n"); //TODO delete
+  //   if(oldact != null){
+  //     memmove(&oldact,&p->signalHandlers[signum],sizeof(void*));
+  //   }
+  //   p->signalHandlers[signum]=&act;
+  // }  
+  // else {
+  //   if(oldact != null){
+  //     memmove(&oldact,&p->signalHandlers[signum],sizeof(void*));
+  //   }
+  //   memmove(&p->signalHandlers[signum],&act,sizeof(void*));
+
+  // }
   return 0; 
 }
 
@@ -750,30 +768,17 @@ void sigkillHandler(void){
 void sigstopHandler(void){
   struct proc *p = myproc(); 
     p->frozen = 1;
-    //int stillFrozen = 1; 
     while(p->frozen){
       if((p->pendingSignals&(1<<SIGKILL))==0){
         p->killed = 1;
         return;
       }
       yield();
-      // else{
-      //   //printf("I'm out freezing");
-      //   stillFrozen = 0; 
-      //   p->frozen = 0; 
-      //   p->pendingSignals = p->pendingSignals & (~ (1 << SIGSTOP)); 
-      //   p->pendingSignals = p->pendingSignals & (~ (1 << SIGCONT));
-      // }
   }
-  //printf("%d is in sigstopHandler\n", myproc()->pid);//TODO delete
 }
 void sigcontHandler(void){
   if (myproc()->frozen == 1){
     myproc()->frozen = 0;
-    printf("%d is frozen in sigcontHandler\n", myproc()->pid); //TODO delete
-  }
-  else{
-      printf("%d is not frozen in sigcontHandler\n", myproc()->pid); //TODO delete
   }
 }
 
