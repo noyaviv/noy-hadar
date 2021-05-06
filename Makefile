@@ -135,6 +135,7 @@ UPROGS=\
 	$U/_wc\
 	$U/_zombie\
 	$U/_chen\
+	$U/_tests\
 
 	# TODO delete "test" and usertest1 or 2
 
