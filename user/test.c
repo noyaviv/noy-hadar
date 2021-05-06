@@ -173,12 +173,12 @@ struct test {
     void (*f)(void);
     char *s;
   } tests[] = {
-     {test_kill, "test_kill"},
-     {test_stop_cont, "test_stop_cont"},
+     //{test_kill, "test_kill"},
+     //{test_stop_cont, "test_stop_cont"},
      {test_stop_cont_2, "test_stop_cont_2"},
-     {test_stop_cont_3, "test_stop_cont_3"},
-     {test_sigaction, "test_sigaction"},
-     {test_sigaction_2, "test_sigaction_2"},
+    //{test_stop_cont_3, "test_stop_cont_3"},
+     //{test_sigaction, "test_sigaction"},
+     //{test_sigaction_2, "test_sigaction_2"},
     { 0, 0}, 
   };
   int main(void){
