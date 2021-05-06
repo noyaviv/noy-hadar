@@ -96,12 +96,6 @@ test_user_signals(){
         sleep(30);
         // printf("still here\n");
     }
-    // printf("hello\n");
-    // sigaction(SIG_TRY, SIG_DFL, &signal);
-    // int c_pid2 = fork();
-    // if(c_pid2 > 0){
-    //     kill(c_pid2, SIG_TRY);
-    // }
 }
 
 int wait_sig = 0;

@@ -723,33 +723,33 @@ int sigaction (int signum, const struct sigaction *act, struct sigaction *oldact
 
   struct sigaction temp;
 
-  if(copyin(p->pagetable,(char*)&temp,(uint64)act, sizeof(struct sigaction)) != 0){
-    printf("sigaction failed in copyin\n");
-    return -1;
-  }
-
-  printf("sigaction copyin completed\n");
-  if(oldact != null){
-    oldact->sa_handler = p->signalHandlers[signum]; 
-    oldact-> sigmask = p->sigMaskArray[signum]; 
-  }
-  p->signalHandlers[signum] = temp.sa_handler; 
-  p->sigMaskArray[signum] = temp.sigmask; 
-
-  // if (act == (void*)SIG_DFL){
-  //   printf("is DanDan right or wrong?\n"); //TODO delete
-  //   if(oldact != null){
-  //     memmove(&oldact,&p->signalHandlers[signum],sizeof(void*));
-  //   }
-  //   p->signalHandlers[signum]=&act;
-  // }  
-  // else {
-  //   if(oldact != null){
-  //     memmove(&oldact,&p->signalHandlers[signum],sizeof(void*));
-  //   }
-  //   memmove(&p->signalHandlers[signum],&act,sizeof(void*));
-
+  // if(copyin(p->pagetable,(char*)&temp,(uint64)act, sizeof(struct sigaction)) != 0){
+  //   printf("sigaction failed in copyin\n");
+  //   return -1;
   // }
+
+  // printf("sigaction copyin completed\n");
+  // if(oldact != null){
+  //   oldact->sa_handler = p->signalHandlers[signum]; 
+  //   oldact-> sigmask = p->sigMaskArray[signum]; 
+  // }
+  // p->signalHandlers[signum] = temp.sa_handler; 
+  // p->sigMaskArray[signum] = temp.sigmask; 
+
+  if (act == (void*)SIG_DFL){
+    printf("is DanDan right or wrong?\n"); //TODO delete
+    if(oldact != null){
+      memmove(&oldact,&p->signalHandlers[signum],sizeof(void*));
+    }
+    p->signalHandlers[signum]=&act;
+  }  
+  else {
+    if(oldact != null){
+      memmove(&oldact,&p->signalHandlers[signum],sizeof(void*));
+    }
+    memmove(&p->signalHandlers[signum],&act,sizeof(void*));
+
+  }
   return 0; 
 }
 
