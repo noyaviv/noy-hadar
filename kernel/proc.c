@@ -621,8 +621,6 @@ kill(int pid, int signum)
           }
         }
         else{
-          if(signum == 11)
-            printf("***** sig try is in pending signals for process %d", p->pid); //TODO : delete
           p->pendingSignals = (p->pendingSignals | 1<<signum); 
         }
         release(&p->lock);
@@ -718,7 +716,6 @@ int sigaction (int signum, const struct sigaction *act, struct sigaction *oldact
   }
 
   p->signalHandlers[signum] = tempAct.sa_handler; 
-  printf("***** process with sig_try hanler pid is %d ******", p->pid);  //TODO: delete 
   p->sigMaskArray[signum] = tempAct.sigmask; 
 
     // if(oldact != null){
@@ -786,6 +783,8 @@ void signalHandler(void){
             p->pendingSignals = p->pendingSignals & (~ (1 << i)); // ~ is Bitwise complement, we remove the signem from the pending signals
         }
         else { //user space handler
+          if(i ==11)
+            printf("*****YAYY*****");  //TODO : delete
           p->backupSigMask= p->signalMask;
           userSpaceHandler(p,i);
         }
