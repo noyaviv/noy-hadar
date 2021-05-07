@@ -621,6 +621,8 @@ kill(int pid, int signum)
           }
         }
         else{
+          if(signum == 11)
+            printf("***** sig try is in pending signals for process %d", p->pid); //TODO : delete
           p->pendingSignals = (p->pendingSignals | 1<<signum); 
         }
         release(&p->lock);
@@ -698,7 +700,7 @@ sigprocmask(uint sigmask) {
   return oldMask; 
   // This will update the process signal mask, the return value should be the old mask
 }
-//TODO : check and change 
+
 int sigaction (int signum, const struct sigaction *act, struct sigaction *oldact){
   if (signum == SIGKILL|| signum == SIGSTOP || signum < 32 || signum >=32)
     return -1; 
@@ -716,40 +718,13 @@ int sigaction (int signum, const struct sigaction *act, struct sigaction *oldact
   }
 
   p->signalHandlers[signum] = tempAct.sa_handler; 
+  printf("***** process with sig_try hanler pid is %d ******", p->pid);  //TODO: delete 
   p->sigMaskArray[signum] = tempAct.sigmask; 
 
-  // struct sigaction temp_act;
-  // struct sigaction temp_oldact;
-  // int num_of_fails = 0; 
-
-  // if(copyin(p->pagetable,(char*)&temp_act,(uint64)act, sizeof(struct sigaction)) != 0){
-  //     num_of_fails +=1; 
-  // }
-  // if(copyin(p->pagetable,(char*)&temp_oldact,(uint64)oldact, sizeof(struct sigaction)) != 0){
-  //   num_of_fails +=1; 
-  // }
-  // printf("num of fails is %d \n", num_of_fails);
-
-  // printf("sigaction copyin completed\n");
-  // if(oldact != null){
-  //   oldact->sa_handler = p->signalHandlers[signum]; 
-  //   oldact-> sigmask = p->sigMaskArray[signum]; 
-  // }
-  // p->signalHandlers[signum] = temp_act.sa_handler; 
-  // p->sigMaskArray[signum] = temp_act.sigmask; 
-
-  // if (act == (void*)SIG_DFL){
-  //   if(oldact != null){
-  //     memmove(&oldact,&p->signalHandlers[signum],sizeof(void*));
-  //   }
-  //   p->signalHandlers[signum]=&act;
-  // }  
-  // else {
     // if(oldact != null){
     //   memmove(&oldact,&p->signalHandlers[signum],sizeof(void*));
     // }
     // memmove(&p->signalHandlers[signum],&act,sizeof(void*));
-  // }
   return 0; 
 }
 
