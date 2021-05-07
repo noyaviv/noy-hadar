@@ -754,6 +754,7 @@ int sigaction (int signum, const struct sigaction *act, struct sigaction *oldact
     }
     memmove(&p->signalHandlers[signum],&act,sizeof(void*));
     printf("%d \n", signum);
+    printf("%d \n", (p->signalHandlers[signum])->signum);
 
   // }
   return 0; 
