@@ -726,7 +726,7 @@ int sigaction (int signum, const struct sigaction *act, struct sigaction *oldact
 }
 
 void sigret (void){
-  (printf("****hi I'm in sigret******");
+  printf("****hi I'm in sigret******");
   struct proc *p;
   p = myproc(); 
   if (p!=0){
