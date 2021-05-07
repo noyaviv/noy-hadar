@@ -712,51 +712,51 @@ sigprocmask(uint sigmask) {
   // This will update the process signal mask, the return value should be the old mask
 }
 
-int sigaction (int signum, const struct sigaction *act, struct sigaction *oldact){
-  if(signum < 0 || signum >= 32)
-    return -1;
+// int sigaction (int signum, const struct sigaction *act, struct sigaction *oldact){
+//   if(signum < 0 || signum >= 32)
+//     return -1;
 
-  struct proc *p = myproc();
+//   struct proc *p = myproc();
 
-  if (signum == SIGKILL|| signum == SIGSTOP)
-    return -1; 
+//   if (signum == SIGKILL|| signum == SIGSTOP)
+//     return -1; 
 
-  struct sigaction temp_act;
-  struct sigaction temp_oldact;
-  int num_of_fails = 0; 
+//   struct sigaction temp_act;
+//   struct sigaction temp_oldact;
+//   int num_of_fails = 0; 
 
-  if(copyin(p->pagetable,(char*)&temp_act,(uint64)act, sizeof(struct sigaction)) != 0){
-      num_of_fails +=1; 
-  }
-  if(copyin(p->pagetable,(char*)&temp_oldact,(uint64)oldact, sizeof(struct sigaction)) != 0){
-    num_of_fails +=1; 
-  }
-  printf("num of fails is %d \n", num_of_fails);
+//   if(copyin(p->pagetable,(char*)&temp_act,(uint64)act, sizeof(struct sigaction)) != 0){
+//       num_of_fails +=1; 
+//   }
+//   if(copyin(p->pagetable,(char*)&temp_oldact,(uint64)oldact, sizeof(struct sigaction)) != 0){
+//     num_of_fails +=1; 
+//   }
+//   printf("num of fails is %d \n", num_of_fails);
 
-  printf("sigaction copyin completed\n");
-  if(oldact != null){
-    oldact->sa_handler = p->signalHandlers[signum]; 
-    oldact-> sigmask = p->sigMaskArray[signum]; 
-  }
-  p->signalHandlers[signum] = temp_act.sa_handler; 
-  p->sigMaskArray[signum] = temp_act.sigmask; 
+//   printf("sigaction copyin completed\n");
+//   if(oldact != null){
+//     oldact->sa_handler = p->signalHandlers[signum]; 
+//     oldact-> sigmask = p->sigMaskArray[signum]; 
+//   }
+//   p->signalHandlers[signum] = temp_act.sa_handler; 
+//   p->sigMaskArray[signum] = temp_act.sigmask; 
 
-  // if (act == (void*)SIG_DFL){
-  //   printf("is DanDan right or wrong?\n"); //TODO delete
-  //   if(oldact != null){
-  //     memmove(&oldact,&p->signalHandlers[signum],sizeof(void*));
-  //   }
-  //   p->signalHandlers[signum]=&act;
-  // }  
-  // else {
-  //   if(oldact != null){
-  //     memmove(&oldact,&p->signalHandlers[signum],sizeof(void*));
-  //   }
-  //   memmove(&p->signalHandlers[signum],&act,sizeof(void*));
+//   // if (act == (void*)SIG_DFL){
+//   //   printf("is DanDan right or wrong?\n"); //TODO delete
+//   //   if(oldact != null){
+//   //     memmove(&oldact,&p->signalHandlers[signum],sizeof(void*));
+//   //   }
+//   //   p->signalHandlers[signum]=&act;
+//   // }  
+//   // else {
+//   //   if(oldact != null){
+//   //     memmove(&oldact,&p->signalHandlers[signum],sizeof(void*));
+//   //   }
+//   //   memmove(&p->signalHandlers[signum],&act,sizeof(void*));
 
-  // }
-  return 0; 
-}
+//   // }
+//   return 0; 
+// }
 
 void sigret (void){
   struct proc *p;
