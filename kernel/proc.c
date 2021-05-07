@@ -806,7 +806,7 @@ void userSpaceHandler(struct proc *p, int signum) {
   // // memmove(p->backupTrapframe,p->trapframe,(sizeof(struct trapframe)));
 
   // back up the process "general" signal mask, and set the current process signal mask to be the signal handler mask.
-  memmove(p->backupTrapframe,p->trapframe,sizeof(struct trapframe));
+  memmove(&p->backupTrapframe,&p->trapframe,sizeof(struct trapframe));
 
   // the process trapframe stack pointer - the size of the trapframe
   int sigret_size= sigret_func_end - sigret_func_start; 
