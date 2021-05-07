@@ -135,9 +135,10 @@ sys_sigaction(void)
   
   //return (uint64)sigaction(signum, act, oldact); 
 
-  if (oldact != null)
-    *oldact.sa_handler = myproc()->signalHandlers[signum];
-    *oldact.sigmask = myproc()->sigMaskArray[signum];
+  if (oldact != null){
+    *oldact->sa_handler = myproc()->signalHandlers[signum];
+    *oldact->sigmask = myproc()->sigMaskArray[signum];
+  }
 
   //todo: what kind of copy?
   myproc()->signal_handler[signum] = *act->sa_handler;
