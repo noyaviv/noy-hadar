@@ -702,7 +702,7 @@ sigprocmask(uint sigmask) {
 }
 
 int sigaction (int signum, const struct sigaction *act, struct sigaction *oldact){
-  if (signum == SIGKILL|| signum == SIGSTOP || signum < 32 || signum >=32)
+  if (signum == SIGKILL|| signum == SIGSTOP || signum < 0 || signum >=32)
     return -1; 
 
   struct proc *p = myproc();
