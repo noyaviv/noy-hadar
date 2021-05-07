@@ -88,7 +88,7 @@ test_user_signals(){
     if(c_pid > 0){
         sleep(10);
         // kill(c_pid, SIGKILL);
-        kill(c_pid, SIG_TRY);
+        kill(3, SIG_TRY);
         printf("sent sig_try\n");
     }
     else{
