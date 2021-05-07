@@ -133,18 +133,18 @@ sys_sigaction(void)
   if(argint(0, &signum) < 0 || argstr(1, (void*)&act, sizeof(*act)) < 0 || argstr(2, (void*)&oldact, sizeof(*oldact)) < 0)
     return -1;
   
-  //return (uint64)sigaction(signum, act, oldact); 
+  return (uint64)sigaction(signum, act, oldact); 
 
-  if (oldact != null){
-    *oldact->sa_handler = myproc()->signalHandlers[signum];
-    *oldact->sigmask = myproc()->sigMaskArray[signum];
-  }
+  // if (oldact != null){
+  //   *oldact->sa_handler = myproc()->signalHandlers[signum];
+  //   *oldact->sigmask = myproc()->sigMaskArray[signum];
+  // }
 
-  //todo: what kind of copy?
-  myproc()->signal_handler[signum] = *act->sa_handler;
-  myproc()->sigMaskArray[signum] = *act->sigmask;
+  // //todo: what kind of copy?
+  // myproc()->signal_handler[signum] = *act->sa_handler;
+  // myproc()->sigMaskArray[signum] = *act->sigmask;
 
-  return 0; 
+  // return 0; 
   //*****NEW****
   // if (signum == SIGKILL || signum == SIGSTOP){
   //     return -1;
