@@ -700,13 +700,23 @@ sigprocmask(uint sigmask) {
 }
 //TODO : check and change 
 int sigaction (int signum, const struct sigaction *act, struct sigaction *oldact){
-  if(signum < 0 || signum >= 32)
-    return -1;
+  if (signum == SIGKILL|| signum == SIGSTOP || signum < 32 || signum >=32)
+    return -1; 
 
   struct proc *p = myproc();
+  struct sigaction tempAct; 
 
-  if (signum == SIGKILL|| signum == SIGSTOP)
+  if (copyin(p->pagetable, (char*)&tempAct, (uint64)act, sizeof(struct sigaction)) != 0){
+    printf("******I'm loser*****"); 
     return -1; 
+  }
+  if(oldact != null){
+    oldact->sa_handler = p->signalHandlers[signum];
+    oldact->sigmask = p->sigMaskArray[signum]; 
+  }
+
+  p->signalHandlers[signum] = tempAct.sa_handler; 
+  p->sigMaskArray[signum] = tempAct.sigmask; 
 
   // struct sigaction temp_act;
   // struct sigaction temp_oldact;
@@ -735,10 +745,10 @@ int sigaction (int signum, const struct sigaction *act, struct sigaction *oldact
   //   p->signalHandlers[signum]=&act;
   // }  
   // else {
-    if(oldact != null){
-      memmove(&oldact,&p->signalHandlers[signum],sizeof(void*));
-    }
-    memmove(&p->signalHandlers[signum],&act,sizeof(void*));
+    // if(oldact != null){
+    //   memmove(&oldact,&p->signalHandlers[signum],sizeof(void*));
+    // }
+    // memmove(&p->signalHandlers[signum],&act,sizeof(void*));
   // }
   return 0; 
 }
