@@ -827,9 +827,7 @@ void userSpaceHandler(struct proc *p, int signum) {
   // the process trapframe stack pointer - the size of the trapframe
   int sigret_size= sigret_func_end - sigret_func_start; 
 
-
   p->trapframe->sp-=sigret_size;
-
 
   //  "copyout" (from kernel to user) this function, to the process trapframe stack pointer
   copyout(p->pagetable, p->trapframe->sp, (char*)&sigret_func_start, sigret_size);
@@ -837,7 +835,6 @@ void userSpaceHandler(struct proc *p, int signum) {
   // save the return address of the tack pointer
   p->trapframe->ra = p->trapframe->sp;
 
-   
   p->trapframe->a0 = signum;
 
   // change mask : save the current mask as backup
@@ -847,6 +844,6 @@ void userSpaceHandler(struct proc *p, int signum) {
   p->signalMask = p->sigMaskArray[signum]; 
 
   // return to the calling function
-  p->trapframe->epc = (uint64)p->signalHandlers[signum];
+  p->trapframe->epc = (uint64)p->signalHandlers[signum]; 
   p->pendingSignals = p->pendingSignals & (~ (1 << signum)); // ~ is Bitwise complement, we remove the signem from the pending signals
 }
