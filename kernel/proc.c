@@ -413,7 +413,6 @@ wait(uint64 addr)
   struct proc *np;
   int havekids, pid;
   struct proc *p = myproc();
-  //printf("pid %d started wait func \n",p->pid); //TODO delete
   acquire(&wait_lock);
 
   for(;;){
@@ -422,29 +421,23 @@ wait(uint64 addr)
     for(np = proc; np < &proc[NPROC]; np++){
       if(np->parent == p){
         // make sure the child isn't still in exit() or swtch().
-       // printf("pid %d got here 2\n",p->pid); //TODO delete
         acquire(&np->lock);
 
         havekids = 1;
         if(np->state == ZOMBIE){        
-         // printf("pid %d got here 3\n",p->pid); //TODO delete
-
           // Found one.
           pid = np->pid;
           if(addr != 0 && copyout(p->pagetable, addr, (char *)&np->xstate,
                                   sizeof(np->xstate)) < 0) {
-           // printf("pid %d got here 4\n",p->pid); //TODO delete
             release(&np->lock);
             release(&wait_lock);
             return -1;
           }
-          //printf("pid %d got here 5\n",p->pid); //TODO delete
           freeproc(np);
           release(&np->lock);
           release(&wait_lock);
           return pid;
         }
-        //printf("pid %d got here 6\n",p->pid); //TODO delete
         release(&np->lock);
       }
     }
@@ -456,7 +449,6 @@ wait(uint64 addr)
     }
     
     // Wait for a child to exit.
-    //printf("pid %d got here 7\n",p->pid); //TODO delete
     sleep(p, &wait_lock);  //DOC: wait-sleep
   }
 }
@@ -620,9 +612,7 @@ kill(int pid, int signum)
     acquire(&p->lock);
       if(p->pid == pid){
         if(signum == SIGKILL){
-          //printf("p->pid is %d \n",p->pid);
           p->killed = 1;
-         // printf("p->pid is %d \n",p->pid);
           printf("kill(%d, %d) from process %d\n", pid,signum, p->pid); //TODO delete
 
           if(p->state == SLEEPING){
@@ -632,9 +622,6 @@ kill(int pid, int signum)
         }
         else{
           p->pendingSignals = (p->pendingSignals | 1<<signum); 
-
-        // if((p->pendingSignals&(1<<SIGCONT))==0)
-        //    printf("sigcont is in the house");
         }
         release(&p->lock);
         return 0;
@@ -711,7 +698,7 @@ sigprocmask(uint sigmask) {
   return oldMask; 
   // This will update the process signal mask, the return value should be the old mask
 }
-
+//TODO : check and change 
 int sigaction (int signum, const struct sigaction *act, struct sigaction *oldact){
   if(signum < 0 || signum >= 32)
     return -1;
@@ -742,7 +729,6 @@ int sigaction (int signum, const struct sigaction *act, struct sigaction *oldact
   // p->sigMaskArray[signum] = temp_act.sigmask; 
 
   // if (act == (void*)SIG_DFL){
-  //   printf("is DanDan right or wrong?\n"); //TODO delete
   //   if(oldact != null){
   //     memmove(&oldact,&p->signalHandlers[signum],sizeof(void*));
   //   }
@@ -753,9 +739,6 @@ int sigaction (int signum, const struct sigaction *act, struct sigaction *oldact
       memmove(&oldact,&p->signalHandlers[signum],sizeof(void*));
     }
     memmove(&p->signalHandlers[signum],&act,sizeof(void*));
-    printf("%d \n", signum);
-    printf("%d \n", (p->signalHandlers[signum])->signum);
-
   // }
   return 0; 
 }
@@ -771,19 +754,20 @@ void sigret (void){
 
 void sigkillHandler(void){
   myproc()->killed = 1; 
-  //printf("%d is in sigkillHandler\n", myproc()->pid);//TODO delete
 }
+
 void sigstopHandler(void){
   struct proc *p = myproc(); 
-    p->frozen = 1;
-    while(p->frozen){
-      if((p->pendingSignals&(1<<SIGKILL))==0){
-        p->killed = 1;
-        return;
-      }
-      yield();
+  p->frozen = 1;
+  while(p->frozen){
+    if((p->pendingSignals&(1<<SIGKILL)) !=0 ){
+      p->killed = 1;
+      return;
+    }
+    yield();
   }
 }
+
 void sigcontHandler(void){
   if (myproc()->frozen == 1){
     myproc()->frozen = 0;
@@ -792,10 +776,9 @@ void sigcontHandler(void){
 
 // for each signal check if can be handled in the kernel space or need to be handle in the user space
 void signalHandler(void){
-  struct proc *p;
-  p = myproc(); 
+  struct proc *p = myproc(); 
   if(p!=0){
-    if(p->sigHandlerFlag==1) //there's a signal that being handling now
+    if(p->sigHandlerFlag == 1) //there's a signal that being handling now
       return;
     for(int i=0;i<32;++i){
       if((1<<i&p->pendingSignals) && !((1<<i)&p->signalMask)){
@@ -809,17 +792,17 @@ void signalHandler(void){
                     sigstopHandler();
                     break;
                 case SIGCONT:
-                    sigcontHandler(); //To Cheack 
+                    sigcontHandler();  
                     break;
                 default:
                     sigkillHandler();
                     break;
             }
             p->pendingSignals = p->pendingSignals & (~ (1 << i)); // ~ is Bitwise complement, we remove the signem from the pending signals
-        }else{ //user space handler
+        }
+        else { //user space handler
           p->backupSigMask= p->signalMask;
-          // userSpaceHandler(p,p->signalMask);
-           userSpaceHandler(p,i);
+          userSpaceHandler(p,i);
         }
       }
     }
@@ -828,6 +811,7 @@ void signalHandler(void){
 }
 
 void userSpaceHandler(struct proc *p, int signum) {
+  printf("****** %d ******* \n", signum); 
   // the process is at "signal handling" -> turn on a flag.
   if (p->sigHandlerFlag==0)
     p->sigHandlerFlag=1;

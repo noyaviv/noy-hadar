@@ -34,8 +34,7 @@ sys_wait(void)
 {
   uint64 p;
   if(argaddr(0, &p) < 0){
-    printf("is it in sys proc\n"); //TODO DELTER
-        return -1;
+    return -1;
   }
 
   return wait(p);
@@ -126,6 +125,8 @@ sys_sigprocmask(void)
 uint64 
 sys_sigaction(void)
 {
+  //This system call will register a new handler for a given signal number (signum). sigaction returns 0 on success, on error, -1 is returned.
+  
   int signum;
   const struct sigaction* act;
   struct sigaction* oldact;
@@ -134,33 +135,13 @@ sys_sigaction(void)
     return -1;
   
   return (uint64)sigaction(signum, act, oldact); 
-
-  // if (oldact != null){
-  //   *oldact->sa_handler = myproc()->signalHandlers[signum];
-  //   *oldact->sigmask = myproc()->sigMaskArray[signum];
-  // }
-
-  // //todo: what kind of copy?
-  // myproc()->signal_handler[signum] = *act->sa_handler;
-  // myproc()->sigMaskArray[signum] = *act->sigmask;
-
-  // return 0; 
-  //*****NEW****
-  // if (signum == SIGKILL || signum == SIGSTOP){
-  //     return -1;
-  // }
-  // if (oldact != null)
-  //   *oldact = myproc()->signalHandlers[signum];
-  // myproc()->signalHandlers[signum] = *act;
-  // return 0;
-    //*****END_NEW****
-  //This system call will register a new handler for a given signal number (signum). sigaction returns 0 on success, on error, -1 is returned.
 }
 
 uint64
 sys_sigret(void)
 {
-  return 0; 
   // This system call will be called implicitly when returning from user space after handling a signal.
+  sigret();
+  return 0; 
 }
 
