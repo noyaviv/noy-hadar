@@ -151,12 +151,12 @@ found:
   p->signalMask = 0; 
   p->pendingSignals = 0;
   p->sigHandlerFlag=0;
+  p->frozen = 0; 
+  p->backupTrapframe = (struct trapframe *)kalloc();
   // struct sigaction sa;
   // memset(&sa,0,sizeof (sa));
-  // sa.sa_handler = (void *)SIG_DFL; 
   for(int i = 0; i<32; i++){
-    // p->signalHandlers[i] = sa; 
-     p->signalHandlers[i] =  SIG_DFL; /* default signal handling */
+     p->signalHandlers[i] =  (void*) SIG_DFL; /* default signal handling */
      p->sigMaskArray[i] = 0;
   }
 
