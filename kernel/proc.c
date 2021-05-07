@@ -726,6 +726,7 @@ int sigaction (int signum, const struct sigaction *act, struct sigaction *oldact
 }
 
 void sigret (void){
+  (printf"****hi I'm in sigret******");
   struct proc *p;
   p = myproc(); 
   if (p!=0){
@@ -783,8 +784,6 @@ void signalHandler(void){
             p->pendingSignals = p->pendingSignals & (~ (1 << i)); // ~ is Bitwise complement, we remove the signem from the pending signals
         }
         else { //user space handler
-          if(i ==11)
-            printf("*****YAYY*****");  //TODO : delete
           p->backupSigMask= p->signalMask;
           userSpaceHandler(p,i);
         }
@@ -806,7 +805,7 @@ void userSpaceHandler(struct proc *p, int signum) {
   // // memmove(p->backupTrapframe,p->trapframe,(sizeof(struct trapframe)));
 
   // back up the process "general" signal mask, and set the current process signal mask to be the signal handler mask.
-  memmove(&p->backupTrapframe,&p->trapframe,sizeof(struct trapframe));
+  memmove(p->backupTrapframe,p->trapframe,sizeof(struct trapframe));
 
   // the process trapframe stack pointer - the size of the trapframe
   int sigret_size= sigret_func_end - sigret_func_start; 
