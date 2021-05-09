@@ -796,7 +796,7 @@ void userSpaceHandler(struct proc *p, int signum) {
   // // memmove(p->trapframe,p->trapframe-(sizeof(struct trapframe))),(sizeof(struct trapframe)))
   // memmove(p->backupTrapframe,(p->trapframe-(sizeof(struct trapframe))),(sizeof(struct trapframe)));
   // // memmove(p->backupTrapframe,p->trapframe,(sizeof(struct trapframe)));
-  acquire(p->lock); 
+  acquire(&p->lock); 
   // back up the process "general" signal mask, and set the current process signal mask to be the signal handler mask.
   memmove(p->backupTrapframe,p->trapframe,sizeof(struct trapframe));
 
@@ -824,5 +824,5 @@ void userSpaceHandler(struct proc *p, int signum) {
   // return to the calling function
   p->trapframe->epc = (uint64)p->signalHandlers[signum]; 
   p->pendingSignals = p->pendingSignals & (~ (1 << signum)); // ~ is Bitwise complement, we remove the signem from the pending signals
-  release(p->lock); 
+  release(&p->lock); 
 }
