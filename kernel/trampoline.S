@@ -144,8 +144,8 @@ userret:
 .globl sigret_func_end
 
 # task 2.4 userSpaceHandler
-sigret_func_start:
-li a7, 24
-ecall
-sigret_func_end:
+        sigret_func_start:
+        li a7, 24
+        ecall
+        sigret_func_end:
 
