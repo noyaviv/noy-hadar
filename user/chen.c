@@ -249,9 +249,9 @@ void test2(){
 int main(){
 
 
-    kernelhandlers_test(); // test kill function and kernel handlers
+    //kernelhandlers_test(); // test kill function and kernel handlers
     //mask_test();           // test block and sigprocmask
-    // userhandler_test();        
+     userhandler_test();        
     // chentest();
     // test2();
 	exit(0);
