@@ -47,23 +47,17 @@ void signal_test(char *s){
     testsig=15;
     struct sigaction act = {test_handler, (uint)(1 << 29)};
     struct sigaction old;
-    printf("50 \n"); 
     sigprocmask(0);
-    printf("52 \n"); 
     sigaction(testsig, &act, &old);
-    printf("54 \n"); 
 
     if((pid = fork()) == 0){
-        printf("57 \n"); 
         while(!wait_sig){
             sleep(1);
         }
             
         exit(0);
     }
-    printf("64 \n"); 
     kill(pid, testsig);
-    printf("66 \n"); 
     wait(&pid);
     // printf("Finished testing signals\n");
 }

@@ -613,8 +613,6 @@ kill(int pid, int signum)
       if(p->pid == pid){
         if(signum == SIGKILL){
           p->killed = 1;
-          printf("kill(%d, %d) from process %d\n", pid,signum, p->pid); //TODO delete
-
           if(p->state == SLEEPING){
             // Wake process from sleep().
             p->state = RUNNABLE;
@@ -705,32 +703,23 @@ int sigaction (int signum, const struct sigaction *act, struct sigaction *oldact
 
   struct proc *p = myproc();
   struct sigaction tempAct; 
-  printf("708 \n"); 
+
   if (copyin(p->pagetable, (char*)&tempAct, (uint64)act, sizeof(struct sigaction)) != 0){
-    printf("******I'm loser*****"); 
     return -1; 
   }
   if(oldact != null){
-    printf("714 \n"); 
     if(copyout(p->pagetable, (uint64)&oldact->sa_handler, (char*)&p->signalHandlers[signum],sizeof(struct sigaction))!= 0)
       return -1; 
     if(copyout(p->pagetable, (uint64)&oldact->sigmask, (char*)&p->sigMaskArray[signum],sizeof(struct sigaction))!= 0)
       return -1; 
   }
-  printf("718 \n"); 
   p->signalHandlers[signum] = tempAct.sa_handler; 
-  printf("720 \n"); 
   p->sigMaskArray[signum] = tempAct.sigmask; 
 
-    // if(oldact != null){
-    //   memmove(&oldact,&p->signalHandlers[signum],sizeof(void*));
-    // }
-    // memmove(&p->signalHandlers[signum],&act,sizeof(void*));
   return 0; 
 }
 
 void sigret (void){
-  printf("****hi I'm in sigret******");
   struct proc *p;
   p = myproc(); 
   if (p!=0){
@@ -798,9 +787,9 @@ void signalHandler(void){
 }
 
 void userSpaceHandler(struct proc *p, int signum) {
-  printf("****** %d ******* \n", signum); 
+  int sigret_size = 0; 
   // the process is at "signal handling" -> turn on a flag.
-  if (p->sigHandlerFlag==0)
+  if (p->sigHandlerFlag == 0)
     p->sigHandlerFlag=1;
   else
     return;
@@ -812,12 +801,14 @@ void userSpaceHandler(struct proc *p, int signum) {
   memmove(p->backupTrapframe,p->trapframe,sizeof(struct trapframe));
 
   // the process trapframe stack pointer - the size of the trapframe
-  int sigret_size= sigret_func_end - sigret_func_start; 
+  sigret_size = sigret_func_end - sigret_func_start; 
 
-  p->trapframe->sp-=sigret_size;
+  p->trapframe->sp -= sigret_size;
 
   //  "copyout" (from kernel to user) this function, to the process trapframe stack pointer
-  copyout(p->pagetable, p->trapframe->sp, (char*)&sigret_func_start, sigret_size);
+  if(copyout(p->pagetable, p->trapframe->sp, (char*)&sigret_func_start, sigret_size) != 0){
+    printf("faild in copyout \n"); 
+  }
   
   // save the return address of the tack pointer
   p->trapframe->ra = p->trapframe->sp;
