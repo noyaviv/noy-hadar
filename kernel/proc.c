@@ -712,8 +712,10 @@ int sigaction (int signum, const struct sigaction *act, struct sigaction *oldact
   }
   if(oldact != null){
     printf("714 \n"); 
-    oldact->sa_handler = p->signalHandlers[signum];
-    oldact->sigmask = p->sigMaskArray[signum]; 
+    if(copyout(p->pagetable, (uint64)&oldact->sa_handler, (char*)&p->signalHandlers[signum],sizeof(struct sigaction))!= 0)
+      return -1; 
+    if(copyout(p->pagetable, (uint64)&oldact->sigmask, (char*)&p->sigMaskArray[signum],sizeof(struct sigaction))!= 0)
+      return -1; 
   }
   printf("718 \n"); 
   p->signalHandlers[signum] = tempAct.sa_handler; 
