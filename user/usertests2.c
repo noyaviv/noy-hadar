@@ -47,28 +47,21 @@ void signal_test(char *s){
     testsig=15;
     struct sigaction act = {test_handler, (uint)(1 << 29)};
     struct sigaction old;
-    // printf("test got here 3\n"); //TODO delete
 
     sigprocmask(0);
-    // printf("test got here 5\n"); //TODO delete
 
     sigaction(testsig, &act, &old);
-    // printf("test got here 6\n"); //TODO delete
 
-    // printf("test got here 4\n"); //TODO delete
 
     if((pid = fork()) == 0){
         while(!wait_sig){
-            printf("hadas\n");
             sleep(1);
         }
             
         exit(0);
     }
     kill(pid, testsig);
-    printf("pid %d is sent to wait from test\n", pid); //TODO delete
     wait(&pid);
-    // printf("test got here 2\n"); //TODO delete
     // printf("Finished testing signals\n");
 }
 
