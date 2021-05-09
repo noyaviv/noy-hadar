@@ -705,17 +705,19 @@ int sigaction (int signum, const struct sigaction *act, struct sigaction *oldact
 
   struct proc *p = myproc();
   struct sigaction tempAct; 
-
+  printf("708 \n"); 
   if (copyin(p->pagetable, (char*)&tempAct, (uint64)act, sizeof(struct sigaction)) != 0){
     printf("******I'm loser*****"); 
     return -1; 
   }
   if(oldact != null){
+    printf("714 \n"); 
     oldact->sa_handler = p->signalHandlers[signum];
     oldact->sigmask = p->sigMaskArray[signum]; 
   }
-
+  printf("718 \n"); 
   p->signalHandlers[signum] = tempAct.sa_handler; 
+  printf("720 \n"); 
   p->sigMaskArray[signum] = tempAct.sigmask; 
 
     // if(oldact != null){
