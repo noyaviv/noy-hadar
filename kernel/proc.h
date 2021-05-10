@@ -1,3 +1,4 @@
+#define NTHREAD 8 ////*****THREADS*****
 
 // Saved registers for kernel context switches.
 struct context {
@@ -83,30 +84,29 @@ struct trapframe {
 
 enum procstate { UNUSED, USED, SLEEPING, RUNNABLE, RUNNING, ZOMBIE };
 
-
 // Per-process state
 struct proc {
   struct spinlock lock;
 
   // p->lock must be held when using these:
-  enum procstate state;                // Process state
-  void *chan;                          // If non-zero, sleeping on chan
-  int killed;                          // If non-zero, have been killed
-  int xstate;                          // Exit status to be returned to parent's wait
-  int pid;                             // Process ID
+  enum procstate state;        // Process state
+  //void *chan;                // If non-zero, sleeping on chan
+  int killed;                  // If non-zero, have been killed
+  int xstate;                  // Exit status to be returned to parent's wait
+  int pid;                     // Process ID
 
   // proc_tree_lock must be held when using this:
-  struct proc *parent;                  // Parent process
+  struct proc *parent;         // Parent process
 
   // these are private to the process, so p->lock need not be held.
-  uint64 kstack;                        // Virtual address of kernel stack
-  uint64 sz;                            // Size of process memory (bytes)
-  pagetable_t pagetable;                // User page table
-  struct trapframe *trapframe;          // data page for trampoline.S
-  struct context context;               // swtch() here to run process
-  struct file *ofile[NOFILE];           // Open files
-  struct inode *cwd;                    // Current directory
-  char name[16];                        // Process name (debugging)
+  uint64 kstack;               // Virtual address of kernel stack
+  uint64 sz;                   // Size of process memory (bytes)
+  pagetable_t pagetable;       // User page table
+  struct trapframe *trapframe; // data page for trampoline.S
+  //struct context context;      // swtch() here to run process
+  struct file *ofile[NOFILE];  // Open files
+  struct inode *cwd;           // Current directory
+  char name[16];               // Process name (debugging)
 
   //2.1.1 additions 
   uint32 pendingSignals;                // 32bit array, stored as type uint.
@@ -118,3 +118,25 @@ struct proc {
   int sigHandlerFlag;                   // 1=signal is now being handling, 0=else
   uint sigMaskArray[32];                // the 2nd field of sigaction
 };
+
+//*****START THREADS*****
+//Thread's states :Unused, Embryo (Used), Sleeping, Runnable, Running, Tzombie, and Invalid.
+enum threadstate { UNUSED, EMBRYO, SLEEPING, RUNNABLE, RUNNING, TZOMBIE, INVAILD };
+
+struct thread {
+    int tid;                      // Thread ID 
+    int killed;                   // If non-zero, have been killed
+    int xstate;                  // Exit status to be returned to parent's wait
+
+    struct trapframe *trapframe;  // Trap frame for current syscall
+    struct trapframe *backuptf;   // Back up trap frame 
+    
+    enum threadstate state;       // Thread state
+    uint64 kstack;                // Virtual address of kernel stack
+    struct context context;       // swtch() here to run thread
+    void *chan;                   // If non-zero, sleeping on chan
+    struct spinlock lock;         // For synchronization 
+    struct proc *parent;          // Parent process
+}
+//*****END THREADS*****
+

@@ -20,6 +20,33 @@ exec(char *path, char **argv)
   struct proghdr ph;
   pagetable_t pagetable = 0, oldpagetable;
   struct proc *p = myproc();
+  struct thread *t = mythread();
+  struct thread *nt; 
+
+  // The thread performing exec should ”tell” other threads of the same process to destroy themselves
+  for(nt=p->threads; nt < &p->threads[NTHREAD]; t++){
+    if(nt->tid != t->tid && t->state != UNUSED)
+      nt->killed = 1; 
+  }
+  
+  // Wake up other threads so they will be able to kill themselves 
+  killingEvryone: 
+  acquire(&p->lock);
+  for(nt=p->threads; nt < &p->threads[NTHREAD]; t++){
+    acquire(&t->lock);
+    if(nt->state == SLEEPING)
+      nt->state = RUNNABLE;
+    release(&t->lock);
+  }
+  release(&p->lock);
+
+  makeSureSuicide:
+  acquire(&p->lock);
+  for(nt=p->threads; nt < &p->threads[NTHREAD]; t++){
+    if((nt->tid != t->tid) && (nt->state != UNUSED || nt->state == ZOMBIE))
+      goto killingEvryone; 
+  }
+  release(&p->lock);
 
   begin_op();
 
@@ -113,11 +140,6 @@ exec(char *path, char **argv)
         continue; 
       p->signalHandlers[j] = SIG_DFL;
       p->sigMaskArray[j] = 0;
-    // void* handler = p->signalHandlers[j].sa_handler;
-    // if((int)handler != SIG_DFL && (int)handler != SIG_IGN) {
-    //   p->signalHandlers[j].sa_handler = SIG_DFL;
-    //   p->signalHandlers[j].sigmask = 0;
-    // }
   }
   // Commit to the user image.
   oldpagetable = p->pagetable;

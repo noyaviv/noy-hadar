@@ -46,7 +46,7 @@ usertrap(void)
   w_stvec((uint64)kernelvec);
 
   struct proc *p = myproc();
-  
+  struct thread *t = mythread();
   // save user program counter.
   p->trapframe->epc = r_sepc();
   
@@ -55,6 +55,10 @@ usertrap(void)
 
     if(p->killed)
       exit(-1);
+    
+    if(t->killed)
+      threadExit(-1);
+
 
     // sepc points to the ecall instruction,
     // but we want to return to the next instruction.
@@ -75,6 +79,9 @@ usertrap(void)
 
   if(p->killed)
     exit(-1);
+  
+  if(t->killed)
+    threadExit(-1);
 
   // give up the CPU if this is a timer interrupt.
   if(which_dev == 2)

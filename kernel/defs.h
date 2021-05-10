@@ -114,6 +114,8 @@ void            sigstopHandler(void);
 void            sigcontHandler(void); 
 void            signalHandler(void);
 void            userSpaceHandler(struct proc*, int);
+void            exitThread(int); // Exit the last running thread (cslled from exit func)
+
 
 // swtch.S
 void            swtch(struct context*, struct context*);
