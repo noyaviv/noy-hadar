@@ -83,6 +83,27 @@ struct trapframe {
   /* 280 */ uint64 t6;
 };
 
+//*****START THREADS*****
+//Thread's states :Unused, Embryo (Used), Sleeping, Runnable, Running, Tzombie, and Invalid.
+enum threadstate { T_UNUSED, T_EMBRYO, T_SLEEPING, T_RUNNABLE, T_RUNNING, T_ZOMBIE, T_INVAILD };
+
+struct thread {
+    int tid;                      // Thread ID 
+    int killed;                   // If non-zero, have been killed
+    int xstate;                  // Exit status to be returned to parent's wait
+
+    struct trapframe *trapframe;  // Trap frame for current syscall
+    struct trapframe *backuptf;   // Back up trap frame 
+    
+    enum threadstate state;       // Thread state
+    uint64 kstack;                // Virtual address of kernel stack
+    struct context context;       // swtch() here to run thread
+    void *chan;                   // If non-zero, sleeping on chan
+    struct spinlock lock;         // For synchronization 
+    //struct proc *parent;          // Parent process
+};
+//*****END THREADS*****
+
 enum procstate { UNUSED, USED, SLEEPING, RUNNABLE, RUNNING, ZOMBIE };
 
 // Per-process state
@@ -118,28 +139,7 @@ struct proc {
   uint32 backupSigMask;                 // backup to signal mask
   int sigHandlerFlag;                   // 1=signal is now being handling, 0=else
   uint sigMaskArray[32];                // the 2nd field of sigaction
-  struct thread threads[NTHREAD];
+  struct thread thread[NTHREAD];
 
 };
-
-//*****START THREADS*****
-//Thread's states :Unused, Embryo (Used), Sleeping, Runnable, Running, Tzombie, and Invalid.
-enum threadstate { T_UNUSED, T_EMBRYO, T_SLEEPING, T_RUNNABLE, T_RUNNING, T_ZOMBIE, T_INVAILD };
-
-struct thread {
-    int tid;                      // Thread ID 
-    int killed;                   // If non-zero, have been killed
-    int xstate;                  // Exit status to be returned to parent's wait
-
-    struct trapframe *trapframe;  // Trap frame for current syscall
-    struct trapframe *backuptf;   // Back up trap frame 
-    
-    enum threadstate state;       // Thread state
-    uint64 kstack;                // Virtual address of kernel stack
-    struct context context;       // swtch() here to run thread
-    void *chan;                   // If non-zero, sleeping on chan
-    struct spinlock lock;         // For synchronization 
-    struct proc *parent;          // Parent process
-};
-//*****END THREADS*****
 
