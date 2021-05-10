@@ -25,7 +25,7 @@ exec(char *path, char **argv)
 
   // The thread performing exec should ”tell” other threads of the same process to destroy themselves
   for(nt=p->threads; nt < &p->threads[NTHREAD]; t++){
-    if(nt->tid != t->tid && t->state != UNUSED)
+    if(nt->tid != t->tid && t->state != T_UNUSED)
       nt->killed = 1; 
   }
   
@@ -34,8 +34,8 @@ exec(char *path, char **argv)
   acquire(&p->lock);
   for(nt=p->threads; nt < &p->threads[NTHREAD]; t++){
     acquire(&t->lock);
-    if(nt->state == SLEEPING)
-      nt->state = RUNNABLE;
+    if(nt->state == T_SLEEPING)
+      nt->state = T_RUNNABLE;
     release(&t->lock);
   }
   release(&p->lock);
@@ -43,7 +43,7 @@ exec(char *path, char **argv)
   makeSureSuicide:
   acquire(&p->lock);
   for(nt=p->threads; nt < &p->threads[NTHREAD]; t++){
-    if((nt->tid != t->tid) && (nt->state != UNUSED || nt->state == ZOMBIE))
+    if((nt->tid != t->tid) && (nt->state != T_UNUSED || nt->state == T_ZOMBIE))
       goto killingEvryone; 
   }
   release(&p->lock);

@@ -121,7 +121,7 @@ struct proc {
 
 //*****START THREADS*****
 //Thread's states :Unused, Embryo (Used), Sleeping, Runnable, Running, Tzombie, and Invalid.
-enum threadstate { UNUSED, EMBRYO, SLEEPING, RUNNABLE, RUNNING, TZOMBIE, INVAILD };
+enum threadstate { T_UNUSED, T_EMBRYO, T_SLEEPING, T_RUNNABLE, T_RUNNING, T_ZOMBIE, T_INVAILD };
 
 struct thread {
     int tid;                      // Thread ID 

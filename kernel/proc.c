@@ -152,7 +152,7 @@ found:
   p->state = USED;
   
  for(t = p->thread; t < &(p->thread[NTHREAD]); t++){
-    t->state = UNUSED;
+    t->stateT_UNUSED;
  }
   // Allocate a trapframe page.
   if((p->trapframe = (struct trapframe *)kalloc()) == 0){
@@ -207,14 +207,14 @@ allocthread(struct proc *p)
   struct thread *t;
   acquire(&p->lock);
     for(t = p->thread; t < &(p->thread[NTHREAD]); t++) {
-      if(t->state == TZOMBIE){
+      if(t->state == T_ZOMBIE){
         t->tid = 0;
         t->killed = 0;
-        t->state = UNUSED;
+        t->state = T_UNUSED;
         //t->kstack = 0;
         //kfree(t->kstack);
       }
-      if(t->state == UNUSED) {
+      if(t->state == T_UNUSED) {
         goto found;
       } 
     }
@@ -223,7 +223,7 @@ allocthread(struct proc *p)
 
   found:
   t->tid = alloctid(); 
-  t->state = EMBRYO;
+  t->state = T_EMBRYO;
   t->killed = 0;
   t-> parent = p; 
  
@@ -264,7 +264,7 @@ freeproc(struct proc *p)
     t->killed = 0; 
     t->chan = 0;
     t->xstate = 0;
-    t->state = UNUSED;
+    t->state = T_UNUSED;
     t->parent = 0;
   }
 }
@@ -348,7 +348,7 @@ userinit(void)
   p->cwd = namei("/");
 
   p->state = RUNNABLE;
-  t->state = RUNNABLE; //Task 3
+  t->state = T_RUNNABLE; //Task 3
 
   release(&p->lock);
 }
@@ -429,7 +429,7 @@ fork(void)
   acquire(&np->lock);
   np->state = RUNNABLE;
   acquire(&t->lock);
-  nt->state = RUNNABLE; 
+  nt->state = T_RUNNABLE; 
   release(&t->lock);
   release(&np->lock);
 
@@ -460,7 +460,7 @@ exitThread(int status)
   int runningThreads = 0; 
 
   for(t = p->thread; t < &(p->thread[NTHREAD]); t++){
-    if (t != curthread && t->state != UNUSED && t->state != TZOMBIE) 
+    if (t != curthread && t->state != T_UNUSED && t->state != T_ZOMBIE) 
       runningThreads += 1;
   }
 
@@ -470,14 +470,14 @@ exitThread(int status)
   }
   acquire(p->lock);
   acquire(curthread->lock);
-  curthread->state = TZOMBIE; 
+  curthread->state = T_ZOMBIE; 
   curthread->xstate = status;
   release(curthread->lock);
   release(p->lock);
 
   for(t = p->thread; t < &(p->thread[NTHREAD]); t++){
-    if (t->chan == curthread && t->state == SLEEPING) 
-      t->state == SLEEPING;
+    if (t->chan == curthread && t->state == T_SLEEPING) 
+      t->state == T_RUNNABLE;
   }
 }
 
@@ -514,7 +514,7 @@ exit(int status)
     if(t != curthread){
       continue;
     }
-    if(t->state != UNUSED){
+    if(t->state != T_UNUSED){
       t->killed = 1;
     }
     release(&t->lock);
@@ -527,8 +527,8 @@ exit(int status)
   acquire(&p->lock);
   for(t = p->thread; t < &(p->thread[NTHREAD]); t++){
     acquire(&t->lock);
-    if (t->state == SLEEPING) {
-      t->state = RUNNABLE;
+    if (t->state == T_SLEEPING) {
+      t->state = T_RUNNABLE;
     }
     release(&t->lock);
   }
@@ -539,7 +539,7 @@ exit(int status)
     acquire(&t->lock);
     if(t == curthread)
       continue;
-    if(t->state != TZOMBIE && t->state != UNUSED)
+    if(t->state != T_ZOMBIE && t->state != T_UNUSED)
       release(&t->lock);
       goto MakeSureOthersAreDead;
     else release(&t->lock);
@@ -596,10 +596,10 @@ wait(uint64 addr)
           pid = np->pid;
           for(t = np->thread; t < &(np->thread[NTHREAD]); t++){
             acquire(&t->lock);
-            if(t->state == TZOMBIE){
+            if(t->state == T_ZOMBIE){
               kfree(t->kstack);
               t->kstack = 0;
-              t->state = UNUSED;
+              t->state = T_UNUSED;
             }
             release(&t->lock);
           }
@@ -659,10 +659,10 @@ scheduler(void)
         // before jumping back to us.
         for(t = p->thread; t < &(p->thread[NTHREAD]); t++) {
           acquire(&t->lock);
-          if(t->state == RUNNABLE){
+          if(t->state == T_RUNNABLE){
             c->proc = p; // found runnable proc
             c->thread = t; // found runnable thread 
-            t->state = RUNNING; 
+            t->state = T_RUNNING; 
             p->state = RUNNING;
             swtch(&c->context, &t->context); //TODO: check of this is the right way to switch between threads on cpu 
             // switch to another thread on the same procces 
@@ -721,7 +721,7 @@ yield(void)
   acquire(&p->lock);
   acquire(&t->lock);
   p->state = RUNNABLE;
-  t->state = RUNNABLE;
+  t->state = T_RUNNABLE;
   sched();
   acquire(&t->lock);
   release(&p->lock);
@@ -769,7 +769,7 @@ sleep(void *chan, struct spinlock *lk)
 
   // Thread go to sleep.
   t->chan = chan;
-  t->state = SLEEPING;
+  t->state = T_SLEEPING;
 
   sched();
 
@@ -795,8 +795,8 @@ wakeup(void *chan)
       for(t = p->thread; t < &(p->thread[NTHREAD]); t++) {
         if(t != mythread()){
           acquire(&t->lock);
-          if(t->state == SLEEPING && t->chan == chan) {
-              t->state = RUNNABLE;
+          if(t->state == T_SLEEPING && t->chan == chan) {
+              t->state = T_RUNNABLE;
             }
           release(&t->lock);
         }
@@ -830,8 +830,8 @@ kill(int pid, int signum)
             acquire(&t->lock);
             t->killed = 1;
             // Wake process from sleep if necessary.
-            if (t->state == SLEEPING)
-              t->state = RUNNABLE;
+            if (t->state == T_SLEEPING)
+              t->state = T_RUNNABLE;
             release(&t->lock);
           }
         }
