@@ -1061,22 +1061,22 @@ kthread_id(void)
 }
 
 // Calling kthread_create will create a new thread within the context of the calling process 
-int 
-kthread_create (void ( *start_func ) ( ) , void *stack) 
-{
+// int 
+// kthread_create (void ( *start_func ) ( ) , void *stack) 
+// {
 
-}
+// }
 
-// This function terminates the execution of the calling thread 
-void 
-kthread_exit(int status)
-{
+// // This function terminates the execution of the calling thread 
+// void 
+// kthread_exit(int status)
+// {
 
-}
+// }
 
-// This function suspends the execution of the calling thread until the target thread, indicated by the argument thread id, terminates
-int 
-kthread_join(int thread_id, int* status)
-{
+// // This function suspends the execution of the calling thread until the target thread, indicated by the argument thread id, terminates
+// int 
+// kthread_join(int thread_id, int* status)
+// {
 
-}
+// }
