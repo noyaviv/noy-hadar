@@ -137,6 +137,6 @@ struct thread {
     void *chan;                   // If non-zero, sleeping on chan
     struct spinlock lock;         // For synchronization 
     struct proc *parent;          // Parent process
-}
+};
 //*****END THREADS*****
 
