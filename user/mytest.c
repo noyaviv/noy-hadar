@@ -3,7 +3,7 @@
 #include "user/user.h"
 
 #define SIG_10 10
-#define SIG_TRY 11
+#define SIG_USER 11
 
 // test the normal kill func with the known SIGKILL
 void testKill(void){
@@ -52,7 +52,7 @@ void testStopCont(void){
 }
 
 void
-print_number_handler(int signum)
+userHandler(int signum)
 {
     printf("number\n");
 }
@@ -61,18 +61,18 @@ print_number_handler(int signum)
 // send userHandler to the child pending signals
 // chiled enters to sleep 
 void
-test_user_signals(){
+userSignals(){
     struct sigaction signal;
     memset(&signal,0,sizeof(struct sigaction));
-    signal.sa_handler = &print_number_handler;
+    signal.sa_handler = &userHandler;
     signal.sigmask = 1;
 
     sigaction(SIG_TRY, &signal, 0);
-    int c_pid = fork();
-    if(c_pid > 0){
+    int npid = fork();
+    if(npid > 0){
         sleep(10);
-        kill(c_pid, SIG_TRY);
-        printf("sent sig_try\n");
+        kill(npid, SIG_USER);
+        printf("sent SIG_USER\n");
     }
     else{
         printf("child is entering to sleep ZZZ \n");
@@ -87,8 +87,8 @@ struct test {
     char *s;
   } tests[] = {
      {testKill, "kill"},
-     {testStopCont, "stop & cont"},
-     {test_user_signals, "sigaction & user sign"},
+     //{testStopCont, "stop & cont"},
+     //{userSignals, "sigaction & user sign"},
     { 0, 0}, 
   };
   int main(void){

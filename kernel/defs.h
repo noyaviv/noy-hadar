@@ -198,3 +198,9 @@ void            virtio_disk_intr(void);
 
 // number of elements in fixed-size array
 #define NELEM(x) (sizeof(x)/sizeof((x)[0]))
+
+//------------------------END OF ASS WITHOUT THREADS------------------------
+//------------------------START FILE WITH THREADS------------------------
+
+// struct thread*  mythread(); ////*****THREADS*****
+// void            exitThread(int); // Exit the last running thread (cslled from exit func)

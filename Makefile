@@ -133,7 +133,6 @@ UPROGS=\
 	$U/_grind\
 	$U/_wc\
 	$U/_zombie\
-	$U/_tests\
 
 	# TODO delete "test" and usertest1 or 2
 

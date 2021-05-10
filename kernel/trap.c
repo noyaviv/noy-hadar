@@ -219,3 +219,14 @@ devintr()
   }
 }
 
+//------------------------END OF ASS WITHOUT THREADS------------------------
+//------------------------START FILE WITH THREADS------------------------
+// in usertrap(void) line 60:
+
+// if(t->killed)
+//       threadExit(-1);
+
+// in usertrap(void) line 83:
+
+// if(t->killed)
+//       threadExit(-1);
