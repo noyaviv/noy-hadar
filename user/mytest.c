@@ -3,12 +3,7 @@
 #include "user/user.h"
 
 #define SIG_10 10
-#define SIG_TRY 11
-void 
-userHandler(int signum)
-{
-    printf("Hi everyone!\n");
-}
+#define SIG_USER 11
 
 // test the normal kill func with the known SIGKILL
 void testKill(void){
@@ -56,52 +51,32 @@ void testStopCont(void){
     }
 }
 
+void
+userHandler(int signum)
+{
+    printf("Hi everyone!\n");
+}
+
 // test at first the sigaction function were the function userHandler enters. 
 // send userHandler to the child pending signals
 // chiled enters to sleep 
 void
 userSignals(){
-    struct sigaction sig;
-
-    memset(&sig,0,sizeof(struct sigaction));
-    sig.sa_handler = &userHandler;
-    sig.sigmask = 1;
-
-    sigaction(SIG_10, &sig, 0); 
-    int npid = fork();
-    if(npid > 0){
-        sleep(10);
-        kill(npid, SIG_10);
-        printf("sig_10 sent to process %d \n", npid);
-    }
-    else{
-        printf("child is entering to sleep ZZZ \n");
-        sleep(30);
-    }
-}
-
-void
-print_number_handler(int signum)
-{
-    printf("number\n");
-}
-
-void
-test_user_signals(){
     struct sigaction signal;
     memset(&signal,0,sizeof(struct sigaction));
-    signal.sa_handler = &print_number_handler;
+
+    signal.sa_handler = &userHandler;
     signal.sigmask = 1;
 
-    sigaction(SIG_TRY, &signal, 0);
+    sigaction(SIG_USER, &signal, 0);
     int c_pid = fork();
     if(c_pid > 0){
         sleep(10);
-        kill(c_pid, SIG_TRY);
-        printf("sent sig_try\n");
+        kill(c_pid, SIG_USER);
+        printf("SIG_USER sent to child\n");
     }
     else{
-        printf("I'm the first child\n");
+        printf("child is entering to sleep ZZZ \n");
         sleep(30);
     }
 
@@ -110,9 +85,9 @@ struct test {
     void (*f)(void);
     char *s;
   } tests[] = {
-     //{testKill, "kill"},
-     //{testStopCont, "stop & cont"},
-     {test_user_signals, "sigaction & user sign"},
+     {testKill, "kill"},
+     {testStopCont, "stop & cont"},
+     {userSignals, "sigaction & user sign"},
     { 0, 0}, 
   };
   int main(void){
