@@ -539,9 +539,10 @@ exit(int status)
     acquire(&t->lock);
     if(t == curthread)
       continue;
-    if(t->state != T_ZOMBIE && t->state != T_UNUSED)
+    if(t->state != T_ZOMBIE && t->state != T_UNUSED){
       release(&t->lock);
       goto MakeSureOthersAreDead;
+    }
     else release(&t->lock);
   }
   release(&p->lock);
