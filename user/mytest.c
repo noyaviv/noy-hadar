@@ -2,7 +2,7 @@
 #include "kernel/stat.h"
 #include "user/user.h"
 
-#define SIG_2 2
+#define SIG_10 10
 
 void 
 userHandler(int signum)
@@ -67,16 +67,16 @@ userSignals(){
     sig.sa_handler = &userHandler;
     sig.sigmask = 1;
 
-    sigaction(SIG_2, &sig, 0); 
+    sigaction(SIG_10, &sig, 0); 
     int npid = fork();
     if(npid > 0){
         sleep(10);
-        kill(npid, SIG_2);
-        printf("sig_2 sent to process %d \n", npid);
+        kill(npid, SIG_10);
+        printf("sig_10 sent to process %d \n", npid);
     }
     else{
         printf("child is entering to sleep ZZZ \n");
-        sleep(20);
+        sleep(30);
     }
 }
 
