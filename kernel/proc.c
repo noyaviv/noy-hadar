@@ -468,7 +468,7 @@ exitThread(int status)
   }
 
   if (runningThreads !=0 && p->state != ZOMBIE) {
-    //release(&ptable.lock); //TODO : make sure 
+    release(&p->lock); //TODO : make sure 
     exit(-1);
   }
   acquire(&p->lock);
@@ -550,7 +550,7 @@ exit(int status)
   }
   release(&p->lock);
 
-  acquire(&ptable.lock);
+  acquire(&p->lock);
 
 
   acquire(&wait_lock);
@@ -601,7 +601,7 @@ wait(uint64 addr)
           for(t = np->thread; t < &(np->thread[NTHREAD]); t++){
             acquire(&t->lock);
             if(t->state == T_ZOMBIE){
-              kfree(t->kstack);
+              //kfree(t->kstack);
               t->kstack = 0;
               t->state = T_UNUSED;
             }
