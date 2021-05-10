@@ -88,7 +88,7 @@ struct test {
   } tests[] = {
      {testKill, "kill"},
      {testStopCont, "stop & cont"},
-     {userSignals, "sigaction & user sign"},
+     {test_user_signals, "sigaction & user sign"},
     { 0, 0}, 
   };
   int main(void){
