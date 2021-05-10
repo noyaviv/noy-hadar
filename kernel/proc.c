@@ -468,15 +468,15 @@ exitThread(int status)
   }
 
   if (runningThreads !=0 && p->state != ZOMBIE) {
-    release(&ptable.lock);
-    exit();
+    //release(&ptable.lock); //TODO : make sure 
+    exit(-1);
   }
-  acquire(p->lock);
-  acquire(curthread->lock);
+  acquire(&p->lock);
+  acquire(&curthread->lock);
   curthread->state = T_ZOMBIE; 
   curthread->xstate = status;
-  release(curthread->lock);
-  release(p->lock);
+  release(&curthread->lock);
+  release(&p->lock);
 
   for(t = p->thread; t < &(p->thread[NTHREAD]); t++){
     if (t->chan == curthread && t->state == T_SLEEPING) 
