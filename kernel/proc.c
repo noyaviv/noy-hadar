@@ -161,6 +161,7 @@ found:
     return 0;
   }
   //*****THREADS*****
+  struct thread *t;
   int threadNum = 0; 
   //TODO : make sure this is the right way
   for(t = p->thread; t < &(p->thread[NTHREAD]); t++) {
@@ -253,7 +254,7 @@ freeproc(struct proc *p)
   p->pid = 0;
   p->parent = 0;
   p->name[0] = 0;
-  p->chan = 0;
+  //p->chan = 0;
   p->killed = 0;
   p->xstate = 0;
   p->state = UNUSED;

@@ -23,6 +23,7 @@ struct context {
 // Per-CPU state.
 struct cpu {
   struct proc *proc;          // The process running on this cpu, or null.
+  struct thread *thread; 
   struct context context;     // swtch() here to enter scheduler().
   int noff;                   // Depth of push_off() nesting.
   int intena;                 // Were interrupts enabled before push_off()?
@@ -117,6 +118,8 @@ struct proc {
   uint32 backupSigMask;                 // backup to signal mask
   int sigHandlerFlag;                   // 1=signal is now being handling, 0=else
   uint sigMaskArray[32];                // the 2nd field of sigaction
+  struct thread threads[NTHREAD];
+
 };
 
 //*****START THREADS*****
