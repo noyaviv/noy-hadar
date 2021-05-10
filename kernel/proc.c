@@ -477,12 +477,12 @@ exitThread(int status)
   curthread->xstate = status;
   release(&curthread->lock);
   release(&p->lock);
-
-  for(t = p->thread; t < &(p->thread[NTHREAD]); t++){
-    if(t->chan == curthread && t->state == T_SLEEPING) {
-      t->state == T_RUNNABLE;
-    }
-  }
+  //TODO: make sure
+  // for(t = p->thread; t < &(p->thread[NTHREAD]); t++){
+  //   if(t->chan == curthread && t->state == T_SLEEPING) {
+  //     t->state == T_RUNNABLE;
+  //   }
+  // }
 }
 
 // Exit the current process.  Does not return.
