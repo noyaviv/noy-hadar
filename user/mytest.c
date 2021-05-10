@@ -3,7 +3,7 @@
 #include "user/user.h"
 
 #define SIG_10 10
-
+#define SIG_TRY 11
 void 
 userHandler(int signum)
 {
@@ -80,12 +80,39 @@ userSignals(){
     }
 }
 
+void
+print_number_handler(int signum)
+{
+    printf("number\n");
+}
+
+void
+test_user_signals(){
+    struct sigaction signal;
+    memset(&signal,0,sizeof(struct sigaction));
+    signal.sa_handler = &print_number_handler;
+    signal.sigmask = 1;
+    printf("handler1: %d, handler2: %d handler3: %d\n",&print_handler,&print_bye_handler,&print_number_handler);
+    printf("user signal: %d, handler: %d mask: %d\n",signal, signal.sa_handler, signal.sigmask);
+    sigaction(SIG_TRY, &signal, 0);
+    int c_pid = fork();
+    if(c_pid > 0){
+        sleep(10);
+        kill(c_pid, SIG_TRY);
+        printf("sent sig_try\n");
+    }
+    else{
+        printf("I'm the first child\n");
+        sleep(30);
+    }
+
+}
 struct test {
     void (*f)(void);
     char *s;
   } tests[] = {
-     {testKill, "kill"},
-     {testStopCont, "stop & cont"},
+     //{testKill, "kill"},
+     //{testStopCont, "stop & cont"},
      {userSignals, "sigaction & user sign"},
     { 0, 0}, 
   };
