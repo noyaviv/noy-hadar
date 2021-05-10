@@ -153,7 +153,7 @@ found:
   p->state = USED;
 
  for(t = p->thread; t < &(p->thread[NTHREAD]); t++){
-    t->stateT_UNUSED;
+    t->state = T_UNUSED;
  }
   // Allocate a trapframe page.
   if((p->trapframe = (struct trapframe *)kalloc()) == 0){
@@ -226,7 +226,7 @@ allocthread(struct proc *p)
   t->tid = alloctid(); 
   t->state = T_EMBRYO;
   t->killed = 0;
-  t-> parent = p; 
+  //t-> parent = p; 
  
   // Set up new context to start executing at forkret,
   // which returns to user space.
@@ -268,7 +268,7 @@ freeproc(struct proc *p)
     t->chan = 0;
     t->xstate = 0;
     t->state = T_UNUSED;
-    t->parent = 0;
+    //t->parent = 0;
   }
 }
 
@@ -458,8 +458,8 @@ void
 exitThread(int status)
 {
   struct proc *p = myproc();
-  struct thread * curthread = mythread();
-  struct thread* t;
+  struct thread *curthread = mythread();
+  struct thread *t;
   int runningThreads = 0; 
 
   for(t = p->thread; t < &(p->thread[NTHREAD]); t++){
