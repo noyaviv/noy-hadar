@@ -21,5 +21,9 @@
 #define SYS_mkdir  20
 #define SYS_close  21
 #define SYS_sigprocmask 22 // 2.1.3 Updating the process signal mask
-#define SYS_sigaction 23 //2.1.4 
-#define SYS_sigret 24 //2.1.5
+#define SYS_sigaction   23 //2.1.4 
+#define SYS_sigret      24 //2.1.5
+#define SYS_bsem_alloc  25 //task 4.1
+#define SYS_bsem_free   26 //task 4.1
+#define SYS_bsem_down   27 //task 4.1
+#define SYS_bsem_up     28 //task 4.1

@@ -113,12 +113,6 @@ sys_sigprocmask(void)
 
   if (sigmask < 0)
     return -1;
-  //*****NEW****
-  // int oldmask = myproc()->signalMask;
-  // myproc()->signalMask = (uint)sigmask;
-  // return oldmask;
- //*****END_NEW****
-
   return (uint64)sigprocmask((uint)sigmask);
 }
 
@@ -131,13 +125,10 @@ sys_sigaction(void)
   const struct sigaction* act;
   struct sigaction* oldact;
 
-  // if(argint(0, &signum) < 0 || argstr(1, (void*)&act, sizeof(*act)) < 0 || argstr(2, (void*)&oldact, sizeof(*oldact)) < 0)
-  //   return -1;
   if(argint(0, &signum) < 0 ||
     argaddr(1, (uint64*)&act) < 0 ||
     argaddr(2, (uint64*)&oldact) < 0)
     return -1;
-  //return (uint64)sigaction(signum, act, oldact);
   
   return (uint64)sigaction(signum, act, oldact); 
 }
@@ -150,3 +141,42 @@ sys_sigret(void)
   return 0; 
 }
 
+//task 4.1
+uint64
+sys_bsem_alloc(void) 
+{
+  return bsem_alloc();
+}
+
+//task 4.1
+uint64
+sys_bsem_free(void)
+{
+  int bsem_id;
+  if(argint(0, &bsem_id) < 0)
+    return -1;
+  bsem_free(bsem_id);
+  return 0;
+}
+
+//task 4.1
+uint64
+sys_bsem_down(void)
+{
+    int bsem_id;
+  if(argint(0, &bsem_id) < 0)
+    return -1;
+  bsem_down(bsem_id);
+  return 0;
+}
+
+//task 4.1
+uint64
+sys_bsem_up(void)
+{
+  int bsem_id;
+  if(argint(0, &bsem_id) < 0)
+    return -1;
+  bsem_up(bsem_id);
+  return 0;
+}

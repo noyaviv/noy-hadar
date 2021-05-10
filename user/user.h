@@ -1,9 +1,5 @@
 struct stat;
 struct rtcdate;
-// struct sigaction {
-//   void (*sa_handler)(int);
-//   uint sigmask;
-// };
 
 // system calls
 int fork(void);
@@ -48,6 +44,10 @@ void *memcpy(void *, const void *, uint);
 
 // signals 
 uint sigprocmask (uint); // 2.1.3 Updating the process signal mask
-//int sigaction (int, const struct sigaction*, struct sigaction*); 
 int sigaction(int signum, const struct sigaction* act, struct sigaction* oldact);
-void sigret (void); //2.1.5 
+void sigret (void); //2.1.5
+int bsem_alloc(void);     //task 4.1
+void bsem_free(int);    //task 4.1
+void bsem_down(int);    //task 4.1
+void bsem_up(int);      //task 4.1
+

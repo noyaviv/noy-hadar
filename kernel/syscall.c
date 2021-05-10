@@ -107,6 +107,10 @@ extern uint64 sys_uptime(void);
 extern uint64 sys_sigprocmask(void); // 2.1.3 Updating the process signal mask
 extern uint64 sys_sigaction(void);
 extern uint64 sys_sigret(void); 
+extern uint64 sys_bsem_alloc(void); //task 4
+extern uint64 sys_bsem_free(void);  //task 4
+extern uint64 sys_bsem_down(void);  //task 4
+extern uint64 sys_bsem_up(void);  //task 4
 
 static uint64 (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
@@ -130,9 +134,13 @@ static uint64 (*syscalls[])(void) = {
 [SYS_link]    sys_link,
 [SYS_mkdir]   sys_mkdir,
 [SYS_close]   sys_close,
-[SYS_sigprocmask]   sys_sigprocmask, // 2.1.3 Updating the process signal mask
-[SYS_sigaction]  sys_sigaction,
-[SYS_sigret]  sys_sigret, //2.1.5]
+[SYS_sigprocmask] sys_sigprocmask, // 2.1.3 Updating the process signal mask
+[SYS_sigaction]   sys_sigaction,
+[SYS_sigret]      sys_sigret, //2.1.5]
+[SYS_bsem_alloc]  sys_bsem_alloc, //task 4.1
+[SYS_bsem_free]   sys_bsem_free, //task 4.1
+[SYS_bsem_down]   sys_bsem_down, //task 4.1
+[SYS_bsem_up]     sys_bsem_up,   //task 4.1
 };
 
 void

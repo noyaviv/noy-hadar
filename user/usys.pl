@@ -38,4 +38,8 @@ entry("sleep");
 entry("uptime");
 entry("sigprocmask"); 
 entry("sigaction"); 
-entry("sigret"); 
+entry("sigret");
+entry("bsem_alloc");  #task 4.1
+entry("bsem_free");   #task 4.1
+entry("bsem_down");   #task 4.1
+entry("bsem_up");     #task 4.1

@@ -94,7 +94,6 @@ int             kill(int, int);
 struct cpu*     mycpu(void);
 struct cpu*     getmycpu(void);
 struct proc*    myproc();
-struct thread*  mythread(); ////*****THREADS*****
 void            procinit(void);
 void            scheduler(void) __attribute__((noreturn));
 void            sched(void);
@@ -115,8 +114,10 @@ void            sigstopHandler(void);
 void            sigcontHandler(void); 
 void            signalHandler(void);
 void            userSpaceHandler(struct proc*, int);
-void            exitThread(int); // Exit the last running thread (cslled from exit func)
-
+int             bsem_alloc(void);   //task 4.1
+void            bsem_free(int);    //task 4.1
+void            bsem_down(int);    //task 4.1
+void            bsem_up(int);      //task 4.1
 
 // swtch.S
 void            swtch(struct context*, struct context*);
