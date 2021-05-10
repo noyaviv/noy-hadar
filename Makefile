@@ -134,8 +134,6 @@ UPROGS=\
 	$U/_wc\
 	$U/_zombie\
 
-	# TODO delete "test" and usertest1 or 2
-
 fs.img: mkfs/mkfs README $(UPROGS)
 	mkfs/mkfs fs.img README $(UPROGS)
 
