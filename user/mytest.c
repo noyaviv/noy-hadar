@@ -85,8 +85,8 @@ struct test {
     void (*f)(void);
     char *s;
   } tests[] = {
-     {testKill, "kill"},
-     {testStopCont, "stop & cont"},
+     //{testKill, "kill"},
+     //{testStopCont, "stop & cont"},
      {userSignals, "sigaction & user sign"},
     { 0, 0}, 
   };
