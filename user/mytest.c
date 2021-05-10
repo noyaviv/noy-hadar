@@ -92,8 +92,7 @@ test_user_signals(){
     memset(&signal,0,sizeof(struct sigaction));
     signal.sa_handler = &print_number_handler;
     signal.sigmask = 1;
-    printf("handler1: %d, handler2: %d handler3: %d\n",&print_handler,&print_bye_handler,&print_number_handler);
-    printf("user signal: %d, handler: %d mask: %d\n",signal, signal.sa_handler, signal.sigmask);
+
     sigaction(SIG_TRY, &signal, 0);
     int c_pid = fork();
     if(c_pid > 0){
