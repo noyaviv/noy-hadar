@@ -136,6 +136,7 @@ static struct proc*
 allocproc(void)
 {
   struct proc *p;
+  struct thread *t;
 
   for(p = proc; p < &proc[NPROC]; p++) {
     acquire(&p->lock);
@@ -150,7 +151,7 @@ allocproc(void)
 found:
   p->pid = allocpid();
   p->state = USED;
-  
+
  for(t = p->thread; t < &(p->thread[NTHREAD]); t++){
     t->stateT_UNUSED;
  }
@@ -161,7 +162,6 @@ found:
     return 0;
   }
   //*****THREADS*****
-  struct thread *t;
   int threadNum = 0; 
   //TODO : make sure this is the right way
   for(t = p->thread; t < &(p->thread[NTHREAD]); t++) {
@@ -241,6 +241,8 @@ allocthread(struct proc *p)
 static void
 freeproc(struct proc *p)
 {
+  struct thread *t;
+
   if(p->trapframe)
     kfree((void*)p->trapframe);
   p->trapframe = 0;
@@ -330,7 +332,7 @@ void
 userinit(void)
 {
   struct proc *p;
-  struct thread *t //Task 3
+  struct thread *t; //Task 3
   p = allocproc();
   t = allocthread(p); //Task 3
   initproc = p;
