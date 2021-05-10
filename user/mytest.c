@@ -67,7 +67,7 @@ userSignals(){
     signal.sa_handler = &userHandler;
     signal.sigmask = 1;
 
-    sigaction(SIG_TRY, &signal, 0);
+    sigaction(SIG_USER, &signal, 0);
     int npid = fork();
     if(npid > 0){
         sleep(10);
