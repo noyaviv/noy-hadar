@@ -479,8 +479,9 @@ exitThread(int status)
   release(&p->lock);
 
   for(t = p->thread; t < &(p->thread[NTHREAD]); t++){
-    if (t->chan == curthread && t->state == T_SLEEPING) 
+    if(t->chan == curthread && t->state == T_SLEEPING) {
       t->state == T_RUNNABLE;
+    }
   }
 }
 
